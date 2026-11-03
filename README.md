@@ -29,7 +29,7 @@ npm run lint
 
 Open [the block library](http://localhost:3000/tools/block-library/index.html) with the
 local AEM proxy running. It provides copyable authoring tables for Cards, Columns,
-Hero, Fragment, Dynamic Dog Image, and List Dynamic Artwork, plus live previews
+Hero, Fragment, Dynamic Dog Image, and Nobel Prize Winners, plus live previews
 using this project's code and styles. No build step or runtime dependencies are required.
 
 1. Select a block and click **Copy block table**. Paste into a DA.live document in
@@ -96,30 +96,37 @@ Add its content URL to the library sheet, save and preview both resources, and
 reload the editor. Deploy the new block code before expecting it to render on
 hosted previews or published pages; saving DA.live content does not deploy code.
 
-### List Dynamic Artwork
+### Nobel Prize Winners
 
-The `list-dynamic-artwork` block uses the
-[Art Institute of Chicago API](https://api.artic.edu/docs/#quick-start) to fetch
-artwork titles and IDs. Each result is a bullet linking to its public artwork page
-at `https://www.artic.edu/artworks/{id}`, not to the API's JSON response.
+The existing `list-dynamic-artwork` block now uses the
+[Nobel Prize API](https://api.nobelprize.org/2.1/laureates?limit=3), replacing the
+Art Institute integration. Its technical block name and library document path
+are retained so existing authored pages continue to work. The library display
+name and rendered heading are **Nobel Prize Winners**.
+
+Each winner appears in a bulleted card with their name linked to the official
+Nobel Prize page, birth or founding details when available, and every awarded
+prize's category, year, and motivation when supplied by the API. Both people and
+organizations are supported. API text is rendered as text, not HTML.
 
 Author a two-column table with a merged heading row **List Dynamic Artwork**:
 
 | Configuration | Value |
 | --- | --- |
-| Count | 5 |
+| Limit | 3 |
 
 Use the [copyable authoring sample](tools/block-library/samples/list-dynamic-artwork.html)
-to retain the merged block-name row when pasting into DA.live. Change **Count**
-to any whole number from **1 to 100**. Omitting the Count row defaults to **5**;
-an empty, nonnumeric, out-of-range, or duplicate Count row displays a configuration
-error instead of silently substituting another number.
+to retain the merged block-name row when pasting into DA.live. Set **Limit**
+to any whole number from **1 to 100**. Omitting the row defaults to **3**.
+Existing **Count** rows remain supported as an alias for Limit. Use only one
+Limit or Count row; empty, nonnumeric, out-of-range, or duplicate settings display
+a configuration error instead of silently substituting another number.
 
-The block requests `/api/v1/artworks?limit={count}&fields=id,title` and renders
-exactly the configured number of linked list items on success. A failed request,
+The block requests `https://api.nobelprize.org/2.1/laureates?limit={limit}` and
+renders exactly the configured number of winners on success. A failed request,
 invalid or incomplete response, or 15-second timeout displays an error with a
 **Try again** button. No API key is required. Requests are made from the visitor's
-browser; a restrictive CSP must allow `https://api.artic.edu` in `connect-src`.
+browser; a restrictive CSP must allow `https://api.nobelprize.org` in `connect-src`.
 
 Its DA.live library document belongs at `/library/blocks/list-dynamic-artwork`.
 Add the document's content URL to the library sheet, save and preview the document
