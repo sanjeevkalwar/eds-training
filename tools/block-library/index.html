@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>EDS Training Block Library</title>
+    <link rel="stylesheet" href="./library.css">
+    <script type="module" src="./library.js"></script>
+  </head>
+  <body class="block-library">
+    <main>
+      <h1>EDS Training Block Library</h1>
+      <p>Choose a block, copy its authoring table, and paste it into a DA.live document in Content view.</p>
+      <p>This library uses this project's existing blocks. Replace sample images, text, and links before publishing.</p>
+      <label for="block-select">Block</label>
+      <select id="block-select" disabled>
+        <option>Loading blocks...</option>
+      </select>
+      <h2 id="block-title">Authoring example</h2>
+      <p><button id="copy-block" type="button" disabled>Copy block table</button></p>
+      <p id="status" role="status" aria-live="polite"></p>
+      <div id="example" class="block-library-example"></div>
+      <p>If clipboard access is unavailable, select the entire table above and copy it manually.</p>
+      <p id="fragment-note" hidden>Fragment includes an existing page. Replace the example URL with a published page on this site; it is not previewed here to avoid loading unrelated content.</p>
+      <section id="preview-section" hidden>
+        <h2>Live preview</h2>
+        <p>Rendered with the project's current block JavaScript and CSS, not the table used for authoring.</p>
+        <iframe id="preview" title="Block preview"></iframe>
+      </section>
+      <section>
+        <h2>Enable the DA.live Blocks picker</h2>
+        <ol>
+          <li>Open <a href="https://da.live/#/sanjeevkalwar/eds-training/library/blocks">your DA.live library folder</a>.
+            Create a document for each listed block with a lowercase name matching its path below.
+            Copy each block's table from this page into the corresponding document and save it.</li>
+          <li>Create a <strong>sheet</strong> at <code>/library/blocks</code> (alongside the folder of the same name).
+            Give it the columns <code>name</code> and <code>path</code>, then copy the entries below.
+            This content-side sheet is what the native picker reads.</li>
+        </ol>
+        <div class="block-library-sheet">
+          <table>
+            <thead><tr><th>name</th><th>path</th></tr></thead>
+            <tbody id="sheet-rows"></tbody>
+          </table>
+        </div>
+        <ol start="3">
+          <li>Open your project's configuration using the gear icon in DA.live.
+            Add a sheet/tab named <code>library</code>. Preserve any existing entries.</li>
+          <li>Add the configuration row below. Keep all six column headers; leave the last four cells empty.</li>
+        </ol>
+        <div class="block-library-sheet">
+          <table>
+            <thead><tr><th>title</th><th>path</th><th>format</th><th>ref</th><th>icon</th><th>experience</th></tr></thead>
+            <tbody><tr><td>Blocks</td><td>https://content.da.live/sanjeevkalwar/eds-training/library/blocks.json</td><td></td><td></td><td></td><td></td></tr></tbody>
+          </table>
+        </div>
+        <ol start="5">
+          <li>Save the configuration, documents, and sheet. Preview the library documents and the
+            library sheet so the editor's preview service uses the latest content. Publishing is not required.</li>
+          <li>Enable <strong>New Authoring</strong> and reopen a document in <strong>Content</strong> view.
+            Open the right-hand <strong>Outline</strong> panel, click a section's three-dot menu, and choose
+            <strong>Add block</strong>. Expand a block and click its <strong>Add ... to page</strong> button.
+            You can also use the <strong>Blocks</strong> tool in the tools panel.</li>
+        </ol>
+        <p>The <a href="./blocks.json">JSON catalog</a> is a reference for the sheet entries.
+          Git changes do not create or save documents or configuration in DA.live.
+          The native picker uses <code>content.da.live</code> document URLs, not these local sample HTML files.</p>
+        <p>The <code>/library/blocks/</code> folder and <code>/library/blocks.json</code> sheet are both
+          required. Their matching names do not make them duplicates.</p>
+        <p>Header and Footer are page infrastructure. Widget needs separately implemented widget assets.
+          Only the ready-to-use authoring examples are included in this catalog.</p>
+        <p><a href="https://www.aem.live/docs/ew/administering/set-up-library">Adobe's library setup guide</a></p>
+      </section>
+    </main>
+  </body>
+</html>
