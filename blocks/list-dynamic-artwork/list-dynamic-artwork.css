@@ -1,19 +1,53 @@
-.list-dynamic-artwork ul {
+.list-dynamic-artwork .laureates {
+  display: grid;
+  gap: 1.25rem;
   padding-inline-start: 1.5em;
   list-style-type: disc;
 }
 
-.list-dynamic-artwork li {
-  margin-block: 0.5em;
+.list-dynamic-artwork .laureates > li {
+  padding: 1.25rem;
+  border: 1px solid #d5c9a6;
+  border-inline-start: 4px solid #947020;
+  border-radius: 6px;
+  background-color: var(--background-color, #fff);
   overflow-wrap: anywhere;
 }
 
-.list-dynamic-artwork li a {
+.list-dynamic-artwork h3 {
+  margin-block: 0 0.5rem;
+}
+
+.list-dynamic-artwork h3 a {
   text-decoration: underline;
 }
 
+.list-dynamic-artwork .laureate-biography,
 .list-dynamic-artwork .list-dynamic-artwork-attribution {
   font-size: var(--body-font-size-xs);
+}
+
+.list-dynamic-artwork .laureate-biography {
+  margin-block: 0 1rem;
+}
+
+.list-dynamic-artwork .laureate-prizes {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list-dynamic-artwork .laureate-prizes > li + li {
+  margin-block-start: 1rem;
+}
+
+.list-dynamic-artwork .laureate-award {
+  margin-block: 0 0.25rem;
+  font-weight: 700;
+}
+
+.list-dynamic-artwork .laureate-motivation {
+  margin: 0;
 }
 
 .list-dynamic-artwork button[hidden] {

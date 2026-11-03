@@ -1,16 +1,75 @@
+function englishText(value) {
+  return typeof value?.en === 'string' ? value.en.trim() : '';
+}
+
+function createLaureate(laureate) {
+  const name = [laureate?.knownName, laureate?.fullName, laureate?.orgName]
+    .map(englishText).find(Boolean);
+  if (!name || !/^\d+$/.test(laureate?.id)
+    || !Number.isSafeInteger(Number(laureate.id)) || Number(laureate.id) < 1
+    || !Array.isArray(laureate.nobelPrizes) || !laureate.nobelPrizes.length) {
+    throw new Error('The Nobel Prize API returned an invalid laureate.');
+  }
+
+  const item = document.createElement('li');
+  const heading = document.createElement('h3');
+  const link = document.createElement('a');
+  link.href = `https://www.nobelprize.org/laureate/${laureate.id}`;
+  link.textContent = name;
+  heading.append(link);
+  item.append(heading);
+
+  const origin = laureate.birth || laureate.founded;
+  const details = [
+    typeof origin?.date === 'string' ? origin.date.trim() : '',
+    englishText(origin?.place?.locationString),
+  ].filter(Boolean);
+  if (details.length) {
+    const biography = document.createElement('p');
+    biography.className = 'laureate-biography';
+    biography.textContent = `${laureate.birth ? 'Born' : 'Founded'}: ${details.join(' | ')}`;
+    item.append(biography);
+  }
+
+  const prizes = document.createElement('ul');
+  prizes.className = 'laureate-prizes';
+  laureate.nobelPrizes.forEach((prize) => {
+    const category = englishText(prize?.category);
+    if (!category || !/^\d{4}$/.test(prize?.awardYear)) {
+      throw new Error('The Nobel Prize API returned an invalid prize.');
+    }
+    const award = document.createElement('li');
+    const label = document.createElement('p');
+    label.className = 'laureate-award';
+    label.textContent = `${category} | ${prize.awardYear}`;
+    award.append(label);
+    const motivation = englishText(prize.motivation);
+    if (motivation) {
+      const description = document.createElement('p');
+      description.className = 'laureate-motivation';
+      description.textContent = motivation;
+      award.append(description);
+    }
+    prizes.append(award);
+  });
+  item.append(prizes);
+  return item;
+}
+
 export default async function decorate(block) {
-  const countRows = [...block.children].filter((row) => (
-    row.children[0]?.textContent.trim().toLowerCase() === 'count'
+  const limitRows = [...block.children].filter((row) => (
+    ['limit', 'count'].includes(row.children[0]?.textContent.trim().toLowerCase())
   ));
-  const value = countRows.length ? countRows[0].children[1]?.textContent.trim() : '5';
-  const count = Number(value);
+  const value = limitRows.length ? limitRows[0].children[1]?.textContent.trim() : '3';
+  const limit = Number(value);
 
   const heading = document.createElement('h2');
-  heading.textContent = 'Artworks';
+  heading.textContent = 'Nobel Prize Winners';
   const status = document.createElement('p');
   status.setAttribute('role', 'status');
   status.setAttribute('aria-live', 'polite');
   const list = document.createElement('ul');
+  list.className = 'laureates';
   const retry = document.createElement('button');
   retry.type = 'button';
   retry.className = 'button primary';
@@ -19,59 +78,47 @@ export default async function decorate(block) {
   const attribution = document.createElement('p');
   attribution.className = 'list-dynamic-artwork-attribution';
   const source = document.createElement('a');
-  source.href = 'https://www.artic.edu/collection';
-  source.textContent = 'Collection of the Art Institute of Chicago';
+  source.href = 'https://www.nobelprize.org/';
+  source.textContent = 'Data from NobelPrize.org';
   attribution.append(source);
   block.replaceChildren(heading, status, list, retry, attribution);
 
-  if (countRows.length > 1 || !/^\d+$/.test(value || '') || count < 1 || count > 100) {
-    status.textContent = 'Invalid Count: enter one whole number from 1 to 100 in the Count row.';
+  if (limitRows.length > 1 || !/^\d+$/.test(value || '') || limit < 1 || limit > 100) {
+    status.textContent = 'Invalid Limit: enter one whole number from 1 to 100 in a single Limit row.';
     // eslint-disable-next-line no-console
-    console.error('List dynamic artwork configuration is invalid', { value });
+    console.error('Nobel Prize Winners configuration is invalid', { value });
     return;
   }
 
-  async function loadArtworks() {
+  async function loadLaureates() {
     retry.disabled = true;
     retry.hidden = true;
     list.replaceChildren();
     list.setAttribute('aria-busy', 'true');
-    status.textContent = 'Loading artworks...';
+    status.textContent = 'Loading Nobel Prize winners...';
     try {
-      const url = new URL('https://api.artic.edu/api/v1/artworks');
-      url.searchParams.set('limit', String(count));
-      url.searchParams.set('fields', 'id,title');
+      const url = new URL('https://api.nobelprize.org/2.1/laureates');
+      url.searchParams.set('limit', String(limit));
       const response = await fetch(url.href, { signal: AbortSignal.timeout(15000) });
-      if (!response.ok) throw new Error(`Artwork API request failed (${response.status}).`);
+      if (!response.ok) throw new Error(`Nobel Prize API request failed (${response.status}).`);
       const payload = await response.json();
-      if (!Array.isArray(payload?.data) || payload.data.length !== count) {
-        throw new Error(`Expected ${count} artworks in the API response.`);
+      if (!Array.isArray(payload?.laureates) || payload.laureates.length !== limit) {
+        throw new Error(`Expected ${limit} laureates in the API response.`);
       }
-      const items = payload.data.map((artwork) => {
-        if (!Number.isSafeInteger(artwork?.id) || artwork.id < 1
-          || typeof artwork.title !== 'string' || !artwork.title.trim()) {
-          throw new Error('The Artwork API returned an invalid artwork.');
-        }
-        const item = document.createElement('li');
-        const link = document.createElement('a');
-        link.href = `https://www.artic.edu/artworks/${artwork.id}`;
-        link.textContent = artwork.title;
-        item.append(link);
-        return item;
-      });
+      const items = payload.laureates.map(createLaureate);
       list.replaceChildren(...items);
-      status.textContent = `${count} ${count === 1 ? 'artwork' : 'artworks'} loaded.`;
+      status.textContent = `${limit} Nobel Prize ${limit === 1 ? 'winner' : 'winners'} loaded.`;
     } catch (error) {
-      status.textContent = 'Unable to load artworks. Please try again.';
+      status.textContent = 'Unable to load Nobel Prize winners. Please try again.';
       retry.hidden = false;
       // eslint-disable-next-line no-console
-      console.error('Dynamic artwork loading failed', error);
+      console.error('Nobel Prize Winners loading failed', error);
     } finally {
       retry.disabled = false;
       list.setAttribute('aria-busy', 'false');
     }
   }
 
-  retry.addEventListener('click', loadArtworks);
-  await loadArtworks();
+  retry.addEventListener('click', loadLaureates);
+  await loadLaureates();
 }
