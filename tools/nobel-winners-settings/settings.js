@@ -7,6 +7,8 @@ const status = document.querySelector('#status');
 let snapshot;
 let selectedBlock;
 let saving = false;
+let renderedSelection;
+let renderedValue;
 
 for (let value = 0; value <= 20; value += 1) {
   const option = document.createElement('option');
@@ -25,10 +27,12 @@ function syncSelection(state) {
   snapshot = state;
   const doc = new DOMParser().parseFromString(state.html, 'text/html');
   const index = state.selection?.blockIndex;
-  selectedBlock = Number.isSafeInteger(index) && index >= 0
-    ? doc.querySelectorAll('[data-block-index]')[index] : undefined;
+  const blocks = [...doc.querySelectorAll('[data-block-index]')];
+  selectedBlock = Number.isSafeInteger(index) && index >= 0 ? blocks[index] : undefined;
   if (!selectedBlock?.classList.contains('list-dynamic-artwork') || state.editable === false) {
     selectedBlock = undefined;
+    renderedSelection = undefined;
+    renderedValue = undefined;
     select.disabled = true;
     select.value = '';
     note.textContent = state.editable === false
@@ -40,6 +44,8 @@ function syncSelection(state) {
   const rows = limitRows(selectedBlock);
   if (rows.length > 1) {
     selectedBlock = undefined;
+    renderedSelection = undefined;
+    renderedValue = undefined;
     select.disabled = true;
     select.value = '';
     note.textContent = 'Remove duplicate Limit or Count rows from this block before using the dropdown.';
@@ -47,10 +53,18 @@ function syncSelection(state) {
   }
   const value = rows.length ? rows[0].children[1]?.textContent.trim() : '3';
   const valid = /^\d+$/.test(value || '') && Number(value) <= 20;
-  select.value = valid ? String(Number(value)) : '';
+  if (renderedSelection !== index && !saving) status.textContent = '';
+  // Unrelated editor updates must not reset a choice still being made in the native select.
+  if (renderedSelection !== index || renderedValue !== value) {
+    select.value = valid ? String(Number(value)) : '';
+  }
+  renderedSelection = index;
+  renderedValue = value;
   select.disabled = saving;
+  const instances = blocks.filter((block) => block.classList.contains('list-dynamic-artwork'));
+  const instance = instances.indexOf(selectedBlock) + 1;
   note.textContent = valid
-    ? `Selected block limit: ${Number(value)}.`
+    ? `Editing Nobel Prize Winners ${instance} of ${instances.length}. Current limit: ${Number(value)}.`
     : 'The current value is invalid. Choose a number from 0 to 20 to correct it.';
 }
 
@@ -102,12 +116,15 @@ async function init() {
       if (typeof result.html === 'string') syncSelection(result);
       status.textContent = `Limit set to ${value}. Preview or publish the page to update the website.`;
     } catch (error) {
+      renderedSelection = undefined;
       status.textContent = `${error.message} Select the block and try again.`;
       // eslint-disable-next-line no-console
       console.error('Nobel Winners Settings update failed', error);
     } finally {
       saving = false;
+      const message = status.textContent;
       syncSelection(snapshot);
+      status.textContent = message;
     }
   });
 }

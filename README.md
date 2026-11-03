@@ -155,6 +155,15 @@ If the document or block selection changes while an update is pending, the
 editor rejects the stale replacement rather than updating the wrong content.
 Read-only documents and duplicate Limit/Count rows cannot be changed by this tool.
 
+There is one settings panel, not one shared setting. Every block stores its own
+Limit row. With multiple instances, the panel identifies the selected one as
+**Editing Nobel Prize Winners 1 of 2**, for example. Selecting the second block
+loads that block's value; changing it leaves the first block untouched. The
+instance number reflects its current document order, not a permanent identifier.
+Moving a block moves its Limit row with it. Unrelated editor updates do not reset
+a dropdown choice in progress; changes to the selected block's actual authored
+value do refresh the dropdown.
+
 DA.live autosaves the edit. Preview or publish the page to update the website;
 changing a dropdown never publishes content automatically. For local testing,
 set the configuration row's **ref** to **local**, open the editor with
