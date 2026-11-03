@@ -83,10 +83,15 @@ export default async function decorate(block) {
   attribution.append(source);
   block.replaceChildren(heading, status, list, retry, attribution);
 
-  if (limitRows.length > 1 || !/^\d+$/.test(value || '') || limit < 1 || limit > 100) {
-    status.textContent = 'Invalid Limit: enter one whole number from 1 to 100 in a single Limit row.';
+  if (limitRows.length > 1 || !/^\d+$/.test(value || '') || limit < 0 || limit > 20) {
+    status.textContent = 'Invalid Limit: enter one whole number from 0 to 20 in a single Limit row.';
     // eslint-disable-next-line no-console
     console.error('Nobel Prize Winners configuration is invalid', { value });
+    return;
+  }
+
+  if (limit === 0) {
+    status.textContent = 'No winners selected.';
     return;
   }
 

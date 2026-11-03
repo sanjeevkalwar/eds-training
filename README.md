@@ -117,10 +117,12 @@ Author a two-column table with a merged heading row **List Dynamic Artwork**:
 
 Use the [copyable authoring sample](tools/block-library/samples/list-dynamic-artwork.html)
 to retain the merged block-name row when pasting into DA.live. Set **Limit**
-to any whole number from **1 to 100**. Omitting the row defaults to **3**.
+to any whole number from **0 to 20**. Omitting the row defaults to **3**.
 Existing **Count** rows remain supported as an alias for Limit. Use only one
 Limit or Count row; empty, nonnumeric, out-of-range, or duplicate settings display
-a configuration error instead of silently substituting another number.
+a configuration error instead of silently substituting another number. With
+**Limit = 0**, the block retains its heading and displays **No winners selected.**
+without making an API request.
 
 The block requests `https://api.nobelprize.org/2.1/laureates?limit={limit}` and
 renders exactly the configured number of winners on success. A failed request,
@@ -131,6 +133,32 @@ browser; a restrictive CSP must allow `https://api.nobelprize.org` in `connect-s
 Its DA.live library document belongs at `/library/blocks/list-dynamic-artwork`.
 Add the document's content URL to the library sheet, save and preview the document
 and sheet, then reload the editor. Deploy the block code separately for hosted rendering.
+
+#### Authoring dropdown in DA.live
+
+The [Nobel Winners Settings tool](tools/nobel-winners-settings/index.html) adds an
+author-only dropdown with values **0 through 20**. It is not a visitor-facing
+control, and the underlying document table remains editable.
+
+After deploying the tool, add this row to the site's DA.live configuration
+**library** tab, preserving its existing rows and column order:
+
+| title | path | format | ref | icon | experience |
+| --- | --- | --- | --- | --- | --- |
+| Nobel Winners Settings | /tools/nobel-winners-settings/index.html | | | | |
+
+Save the configuration and reload the Experience Workspace editor. Open
+**Nobel Winners Settings** from the tools panel, click inside a Nobel Prize Winners
+block, and choose a number. The tool updates only that block's Limit row using
+the DA SDK, retaining other authored rows. An existing Count row becomes Limit.
+If the document or block selection changes while an update is pending, the
+editor rejects the stale replacement rather than updating the wrong content.
+Read-only documents and duplicate Limit/Count rows cannot be changed by this tool.
+
+DA.live autosaves the edit. Preview or publish the page to update the website;
+changing a dropdown never publishes content automatically. For local testing,
+set the configuration row's **ref** to **local**, open the editor with
+`?ref=local` before the URL hash, and keep the AEM proxy running.
 
 ## Local development
 
