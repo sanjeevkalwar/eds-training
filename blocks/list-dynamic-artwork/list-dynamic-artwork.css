@@ -1,0 +1,21 @@
+.list-dynamic-artwork ul {
+  padding-inline-start: 1.5em;
+  list-style-type: disc;
+}
+
+.list-dynamic-artwork li {
+  margin-block: 0.5em;
+  overflow-wrap: anywhere;
+}
+
+.list-dynamic-artwork li a {
+  text-decoration: underline;
+}
+
+.list-dynamic-artwork .list-dynamic-artwork-attribution {
+  font-size: var(--body-font-size-xs);
+}
+
+.list-dynamic-artwork button[hidden] {
+  display: none;
+}

@@ -1,7 +1,7 @@
 {
-  "total": 4,
+  "total": 6,
   "offset": 0,
-  "limit": 4,
+  "limit": 6,
   "data": [
     {
       "name": "Cards",
@@ -18,6 +18,14 @@
     {
       "name": "Fragment",
       "path": "https://content.da.live/sanjeevkalwar/eds-training/library/blocks/fragment"
+    },
+    {
+      "name": "Dynamic Dog Image",
+      "path": "https://content.da.live/sanjeevkalwar/eds-training/library/blocks/dynamic-dog-image"
+    },
+    {
+      "name": "List Dynamic Artwork",
+      "path": "https://content.da.live/sanjeevkalwar/eds-training/library/blocks/list-dynamic-artwork"
     }
   ],
   ":type": "sheet"

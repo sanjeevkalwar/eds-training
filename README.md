@@ -29,8 +29,8 @@ npm run lint
 
 Open [the block library](http://localhost:3000/tools/block-library/index.html) with the
 local AEM proxy running. It provides copyable authoring tables for Cards, Columns,
-Hero, and Fragment, plus live previews of the visual blocks using this project's
-code and styles. No build step or runtime dependencies are required.
+Hero, Fragment, Dynamic Dog Image, and List Dynamic Artwork, plus live previews
+using this project's code and styles. No build step or runtime dependencies are required.
 
 1. Select a block and click **Copy block table**. Paste into a DA.live document in
    **Content** view, not into source/code view. If clipboard access is denied,
@@ -39,10 +39,10 @@ code and styles. No build step or runtime dependencies are required.
    your production images through DA.live rather than relying on localhost URLs.
    The included sample artwork is in [sample.svg](tools/block-library/sample.svg).
 3. To enable **Tools > Blocks**, follow the library page's setup tables: create the
-   four block documents in DA.live, create the `/library/blocks` sheet with `name`
+   example block documents in DA.live, create the `/library/blocks` sheet with `name`
    and `path` columns, then add its content URL to the project configuration's
    `library` tab. Keep existing library configuration entries.
-4. Save the documents, sheet, and configuration. **Preview both the four library
+4. Save the documents, sheet, and configuration. **Preview both the library
    documents and the library sheet** so the new editor's preview service sees
    the latest content. Publishing to the live site is not required for this step.
 5. Enable **New Authoring** to use Experience Workspace, then open a document in
@@ -71,6 +71,59 @@ widget assets. These are not insertable samples in this library.
 
 See [Adobe's library setup guide](https://www.aem.live/docs/ew/administering/set-up-library)
 for the content-side configuration.
+
+### Dynamic Dog Image
+
+The `dynamic-dog-image` block fetches a single random image from the
+[Dog CEO API](https://dog.ceo/dog-api/documentation/random) at
+`https://dog.ceo/api/breeds/image/random`. No API key is required. Each page load
+fetches an image; **Show another dog** fetches a new random selection (the API may
+return the same image). Requests go directly from the visitor's browser to Dog CEO.
+
+Author a one-column table headed **Dynamic Dog Image**, with an optional heading
+in the next row, such as **Meet a random dog**. Empty content uses that default.
+See the [authoring sample](tools/block-library/samples/dynamic-dog-image.html).
+The image is supplied at runtime; do not paste a fixed dog image into the table.
+
+The block announces loading and completion, disables its button while loading,
+and shows a **Try again** action if the API or image fails. API and image loads
+each have a 15-second timeout. Images are responsive and retain their proportions.
+If you add a restrictive Content Security Policy, allow `https://dog.ceo` in
+`connect-src` and `https://images.dog.ceo` in `img-src`.
+
+The DA.live library document belongs at `/library/blocks/dynamic-dog-image`.
+Add its content URL to the library sheet, save and preview both resources, and
+reload the editor. Deploy the new block code before expecting it to render on
+hosted previews or published pages; saving DA.live content does not deploy code.
+
+### List Dynamic Artwork
+
+The `list-dynamic-artwork` block uses the
+[Art Institute of Chicago API](https://api.artic.edu/docs/#quick-start) to fetch
+artwork titles and IDs. Each result is a bullet linking to its public artwork page
+at `https://www.artic.edu/artworks/{id}`, not to the API's JSON response.
+
+Author a two-column table with a merged heading row **List Dynamic Artwork**:
+
+| Configuration | Value |
+| --- | --- |
+| Count | 5 |
+
+Use the [copyable authoring sample](tools/block-library/samples/list-dynamic-artwork.html)
+to retain the merged block-name row when pasting into DA.live. Change **Count**
+to any whole number from **1 to 100**. Omitting the Count row defaults to **5**;
+an empty, nonnumeric, out-of-range, or duplicate Count row displays a configuration
+error instead of silently substituting another number.
+
+The block requests `/api/v1/artworks?limit={count}&fields=id,title` and renders
+exactly the configured number of linked list items on success. A failed request,
+invalid or incomplete response, or 15-second timeout displays an error with a
+**Try again** button. No API key is required. Requests are made from the visitor's
+browser; a restrictive CSP must allow `https://api.artic.edu` in `connect-src`.
+
+Its DA.live library document belongs at `/library/blocks/list-dynamic-artwork`.
+Add the document's content URL to the library sheet, save and preview the document
+and sheet, then reload the editor. Deploy the block code separately for hosted rendering.
 
 ## Local development
 

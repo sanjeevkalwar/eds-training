@@ -4,7 +4,9 @@ async function preview() {
   const main = document.querySelector('main');
   try {
     const name = new URLSearchParams(window.location.search).get('block');
-    if (!['cards', 'columns', 'hero'].includes(name)) throw new Error('Unsupported preview block.');
+    if (!['cards', 'columns', 'hero', 'dynamic-dog-image', 'list-dynamic-artwork'].includes(name)) {
+      throw new Error('Unsupported preview block.');
+    }
     const response = await fetch(`./samples/${name}.html`);
     if (!response.ok) throw new Error(`Example request failed (${response.status}).`);
     const doc = new DOMParser().parseFromString(await response.text(), 'text/html');
