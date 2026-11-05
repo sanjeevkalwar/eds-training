@@ -25,6 +25,16 @@ npm i
 npm run lint
 ```
 
+## Cloud Manager repository verification
+
+The verification challenge belongs at
+[`well-known/adobe/cloudmanager-challenge.txt`](well-known/adobe/cloudmanager-challenge.txt)
+in the repository root, not under `blocks/` and not in `.well-known/`.
+For Edge Delivery Services, Adobe explicitly requires the path without a leading dot.
+After deploying it to `main`, click **Verify** in Cloud Manager.
+Keep the Edge Delivery origin set to the site's base URL, not the challenge file URL.
+See [Adobe's onboarding instructions](https://experienceleague.adobe.com/en/docs/experience-manager-cloud-service/content/implementing/using-cloud-manager/edge-delivery-sites/add-edge-delivery-site).
+
 ## Block library for DA.live
 
 Open [the block library](http://localhost:3000/tools/block-library/index.html) with the
