@@ -1,73 +1,35 @@
+
 export default function decorate(block) {
-  const items = [...block.children];
+  [...block.children].forEach((row) => {
+    const cells = [...row.children];
 
-  const cards = items.map((item) => {
-    const cells = [...item.children];
+    const getText = (i, fallback = '') =>
+      cells[i]?.textContent.trim() || fallback;
 
-    const [
-      eyebrow,
-      title,
-      description,
-      iconName,
-      buttonText,
-      buttonLink,
-      accent,
-      theme,
-      alignment,
-      radius,
-      iconSize,
-    ] = cells.map((cell) => cell.textContent.trim());
+    const card = document.createElement('div');
+    card.className = 'feature-card-content';
 
-    return `
-      <div
-        class="feature-card ${theme || 'light'} ${alignment || 'left'}"
-        style="
-          --accent:${accent || '#7C3AED'};
-          --radius:${radius || 20}px;
-          --icon-size:${iconSize || 48}px;
-        "
-      >
-        ${
-          eyebrow
-            ? `<div class="feature-card-eyebrow">${eyebrow}</div>`
-            : ''
-        }
+    card.style.setProperty('--accent', getText(6, '#7C3AED'));
+    card.style.setProperty('--radius', `${getText(9, '20')}px`);
 
-        ${
-          iconName
-            ? `<div class="feature-card-icon">
-                <span>${iconName}</span>
-              </div>`
-            : ''
-        }
+    const eyebrow = getText(0);
+    const title = getText(1);
+    const description = cells[2]?.innerHTML || '';
+    const buttonText = getText(4);
+    const buttonLink = getText(5);
 
-        ${title ? `<h3>${title}</h3>` : ''}
-
-        ${
-          description
-            ? `<div class="feature-card-description">
-                ${description}
-              </div>`
-            : ''
-        }
-
-        ${
-          buttonText
-            ? `<a
-                class="feature-card-button"
-                href="${buttonLink || '#'}"
-              >
-                ${buttonText}
-              </a>`
-            : ''
-        }
-      </div>
+    card.innerHTML = `
+      <span class="eyebrow">${eyebrow}</span>
+      <h2>${title}</h2>
+      <div class="description">${description}</div>
+      ${buttonText && buttonLink
+        ? `<a href="${buttonLink}">${buttonText} →</a>`
+        : ''}
     `;
+
+    row.replaceChildren(card);
+    row.classList.add('feature-card-item');
   });
 
-  block.innerHTML = `
-    <div class="feature-card-container">
-      ${cards.join('')}
-    </div>
-  `;
+  block.classList.add('feature-card');
 }
