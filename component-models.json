@@ -223,6 +223,108 @@
     ]
   },
   {
+    "id": "feature",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "label": "Eyebrow",
+        "value": "NEW FEATURE"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "value": "Universal Editor"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "value": "Create, customize, and manage all your content in one seamless editing experience."
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "iconName",
+        "label": "Icon Name",
+        "value": "file-pen-line"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "buttonText",
+        "label": "Button Text",
+        "value": "Explore Editor"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "buttonLink",
+        "label": "Button Link",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "accent",
+        "label": "Accent Color",
+        "value": "#7C3AED"
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "theme",
+        "label": "Theme",
+        "value": "light",
+        "options": [
+          {
+            "name": "Light",
+            "value": "light"
+          },
+          {
+            "name": "Dark",
+            "value": "dark"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "alignment",
+        "label": "Alignment",
+        "value": "left",
+        "options": [
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          }
+        ]
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "radius",
+        "label": "Border Radius",
+        "value": 20
+      },
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "iconSize",
+        "label": "Icon Size",
+        "value": 48
+      }
+    ]
+  },
+  {
     "id": "fragment",
     "fields": [
       {

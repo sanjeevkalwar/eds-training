@@ -47,5 +47,11 @@
       "button",
       "title"
     ]
+  },
+  {
+    "id": "feature-card",
+    "components": [
+      "feature"
+    ]
   }
 ]
