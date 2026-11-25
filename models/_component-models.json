@@ -1,0 +1,5 @@
+[
+  { "...": "./_default-content.json#/models" },
+  { "...": "./_section.json#/models" },
+  { "...": "../blocks/*/_*.json#/models" }
+]

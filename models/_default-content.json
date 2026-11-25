@@ -1,0 +1,106 @@
+{
+  "definitions": [
+    {
+      "title": "Text",
+      "id": "text",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/text/v1/text",
+            "template": {}
+          }
+        }
+      }
+    },
+    {
+      "title": "Title",
+      "id": "title",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/title/v1/title",
+            "template": { "model": "title" }
+          }
+        }
+      }
+    },
+    {
+      "title": "Image",
+      "id": "image",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/image/v1/image",
+            "template": {}
+          }
+        }
+      }
+    },
+    {
+      "title": "Button",
+      "id": "button",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/button/v1/button",
+            "template": { "model": "button" }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "page-metadata",
+      "fields": [
+        { "component": "text", "valueType": "string", "name": "jcr:title", "label": "Title" },
+        { "component": "text", "valueType": "string", "name": "jcr:description", "label": "Description" },
+        { "component": "text", "valueType": "string", "name": "keywords", "multi": true, "label": "Keywords" }
+      ]
+    },
+    {
+      "id": "image",
+      "fields": [
+        { "component": "reference", "name": "image", "label": "Image", "multi": false },
+        { "component": "text", "name": "imageAlt", "label": "Alt Text" }
+      ]
+    },
+    {
+      "id": "title",
+      "fields": [
+        { "component": "text", "name": "title", "label": "Title" },
+        {
+          "component": "select",
+          "name": "titleType",
+          "label": "Title Type",
+          "options": [
+            { "name": "h1", "value": "h1" },
+            { "name": "h2", "value": "h2" },
+            { "name": "h3", "value": "h3" },
+            { "name": "h4", "value": "h4" },
+            { "name": "h5", "value": "h5" },
+            { "name": "h6", "value": "h6" }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "button",
+      "fields": [
+        { "component": "aem-content", "name": "link", "label": "Link" },
+        { "component": "text", "name": "linkText", "label": "Text" },
+        { "component": "text", "name": "linkTitle", "label": "Title" },
+        {
+          "component": "select",
+          "name": "linkType",
+          "label": "Type",
+          "options": [
+            { "name": "Default", "value": "" },
+            { "name": "Primary", "value": "primary" },
+            { "name": "Secondary", "value": "secondary" }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "definitions": [
+    {
+      "title": "Columns",
+      "id": "columns",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/columns/v1/columns",
+            "template": { "columns": "2", "rows": "1" }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "columns",
+      "fields": [
+        { "component": "text", "valueType": "number", "name": "columns", "label": "Columns" },
+        { "component": "text", "valueType": "number", "name": "rows", "label": "Rows" }
+      ]
+    }
+  ],
+  "filters": [
+    { "id": "columns", "components": ["column"] },
+    { "id": "column", "components": ["text", "image", "button", "title"] }
+  ]
+}

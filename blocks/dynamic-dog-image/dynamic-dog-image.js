@@ -1,3 +1,5 @@
+import { moveInstrumentation } from '../../scripts/ue.js';
+
 const API_URL = 'https://dog.ceo/api/breeds/image/random';
 const TIMEOUT = 15000;
 
@@ -28,6 +30,10 @@ export default async function decorate(block) {
     || 'Meet a random dog';
   const heading = document.createElement('h2');
   heading.textContent = title;
+  moveInstrumentation(
+    block.querySelector('[data-aue-prop="heading"]'),
+    heading,
+  );
 
   const media = document.createElement('div');
   media.className = 'dynamic-dog-image-media';

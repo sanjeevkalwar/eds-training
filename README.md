@@ -1,5 +1,7 @@
-# Your Project's Title...
-Your project's description...
+# EDS Training
+
+Edge Delivery Services blocks with AEM as a Cloud Service / Universal Editor
+authoring support. The existing DA.live authoring tools remain available.
 
 ## Environments
 - Preview: https://main--eds-training--sanjeevkalwar.aem.page/
@@ -24,6 +26,108 @@ npm i
 ```sh
 npm run lint
 ```
+
+## AEM as a Cloud Service + Universal Editor
+
+This repository uses Adobe's XWalk component definitions and AEM's built-in
+`core/franklin` resource types. It does not need custom Sling components, a Maven
+build, or a Cloud Manager code deployment to render EDS blocks.
+
+### Repository configuration
+
+The deployed files are:
+
+- [component-definition.json](component-definition.json): component picker.
+- [component-models.json](component-models.json): editable fields.
+- [component-filters.json](component-filters.json): allowed components in containers.
+
+Edit the source files under [models](models/) and each block's `_*.json`, then run:
+
+```sh
+npm run build:json
+npm run test:authoring
+npm run lint
+```
+
+Commit the source JSON **and all three generated root JSON files**. JSON generation
+is development-only; the site still serves JavaScript and CSS without a build step.
+CI rejects generated configuration that is out of date. Source models and tests
+are excluded from delivery by [.hlxignore](.hlxignore); the root JSON must stay public.
+
+Sections accept Text, Title, Image, Button, Hero, Cards, Columns, Fragment, Carousel,
+Dynamic Dog Image, and Nobel Prize Winners. Cards and Carousel are containers:
+insert the container, then add Card or Carousel Slide children. Columns use AEM's
+built-in layout component with default-content children.
+Header/Footer remain page infrastructure. Widget is not in the picker because it
+requires separate widget assets.
+
+Nobel Prize Winners has an author-only dropdown from **0 to 20**, defaulting to 3.
+Its model uses `"key-value": true` so AEM emits the same Limit table as DA.live.
+Each instance retains its own setting; zero makes no API request.
+
+Authoring attributes are preserved when cards, slides, images, and dog headings
+are transformed. Selecting a carousel slide in the content tree reveals it.
+In Universal Editor, saved content operations reload the **page canvas**, not the
+editor shell. Rich text is grouped for in-context editing. Auto-blocking is skipped
+on instrumented AEM pages so authored component identities are not replaced.
+An authored Fragment remains selectable; edit its embedded content on the source
+page. Existing document-based Fragment flattening is unchanged.
+
+### Required AEM and site setup
+
+Repository changes do **not** create an AEM site, change its content source, or
+migrate existing DA.live documents into AEM.
+
+1. Ensure [AEM Code Sync](https://github.com/apps/aem-code-sync) has access to this
+   repository, then deploy the code to the branch configured for your site.
+   Merging `main` ships code; publishing content is separate.
+2. If the site was created with a regular AEM Sites template, create an EDS site
+   using the latest **AEM authoring with Edge Delivery Services** template from
+   [XWalk releases](https://github.com/adobe-rnd/aem-boilerplate-xwalk/releases).
+   A GitHub connection on a regular site is not a substitute for this template.
+   For an existing EDS/XWalk site, retain it and verify its cloud configuration.
+3. In AEM **Sites → Create → Site from template**, use this Project URL:
+   `https://main--eds-training--sanjeevkalwar.aem.page`.
+   The EDS template supplies the AEM connection, Universal Editor bridge, and
+   references to the three component JSON files; do not hard-code an author host
+   or credentials into this repository.
+4. In [Site Admin](https://tools.aem.live/tools/site-admin/index.html), verify that
+   `sanjeevkalwar/eds-training` uses your AEM Author content source:
+   `https://<aem-author>/bin/franklin.delivery/sanjeevkalwar/eds-training/main`.
+   Review before changing it: replacing a DA.live source changes where this EDS
+   site reads content. Configure path mappings using the
+   [configuration service](https://www.aem.live/developer/authoring-path-mapping)
+   if your AEM content root differs from the public root.
+   Do not add retired `fstab.yaml`, `paths.json`, or `helix-query.yaml` files.
+5. Verify the site's Edge Delivery cloud configuration and technical account
+   permissions using [Adobe's setup guide](https://www.aem.live/developer/ue-tutorial).
+   Then open an EDS page in AEM **Sites → Edit**. Use Universal Editor's author
+   canvas, not the public `.aem.page` preview, to test editing.
+
+### Acceptance checks in your AEM environment
+
+1. On the configured branch, confirm `/component-definition.json`,
+   `/component-models.json`, and `/component-filters.json` all return JSON.
+2. Open an AEM EDS page in Universal Editor. Select a section and use **Add**:
+   verify the listed blocks appear. Insert Cards and add two Card children.
+3. Edit Hero text/image and a Card image, add/move/delete cards, and select a
+   Carousel Slide in the content tree. The page should refresh with saved edits.
+4. Insert two Nobel Prize Winners blocks, set different dropdown values (including
+   zero), and verify that each instance renders its own selection.
+5. Publish to **Preview** and check the mapped page at
+   `https://main--eds-training--sanjeevkalwar.aem.page/<path>`.
+   Preview success alone does not prove authoring works.
+
+The existing header and footer load `/nav` and `/footer` as fragments (or the
+paths specified by page metadata). Create and preview those pages in the chosen
+content source. They currently return 404 on this repository's preview, so local
+testing reports header/footer loading errors until that content is supplied.
+
+For branch testing, append `?ref=<branch>` to the **author canvas URL** in Universal
+Editor. A PR must include the matching
+`https://<branch>--eds-training--sanjeevkalwar.aem.page/<path>` test link.
+The AEM environment checks require your authenticated author instance and cannot
+be established by local JSON/DOM tests.
 
 ## Cloud Manager repository verification
 

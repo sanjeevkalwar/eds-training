@@ -20,7 +20,8 @@ import {
  */
 export async function loadFragment(path) {
   if (path && path.startsWith('/') && !path.startsWith('//')) {
-    const resp = await fetch(`${path}.plain.html`);
+    const normalizedPath = path.replace(/(?:\.plain)?\.html$/, '');
+    const resp = await fetch(`${normalizedPath}.plain.html`);
     if (resp.ok) {
       const main = document.createElement('main');
       main.innerHTML = await resp.text();
@@ -47,6 +48,17 @@ export default async function decorate(block) {
   const path = link ? link.getAttribute('href') : block.textContent.trim();
   const fragment = await loadFragment(path);
   if (!fragment) return;
+
+  if (block.hasAttribute('data-aue-resource')) {
+    // Keep the authored reference selectable; embedded content is edited at its source.
+    fragment.querySelectorAll('*').forEach((element) => {
+      [...element.attributes]
+        .filter(({ name }) => name.startsWith('data-aue-') || name.startsWith('data-richtext-'))
+        .forEach(({ name }) => element.removeAttribute(name));
+    });
+    block.replaceChildren(...fragment.childNodes);
+    return;
+  }
 
   const wrapper = block.closest('.fragment-wrapper');
   const section = wrapper.closest('.section');

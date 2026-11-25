@@ -11,4 +11,7 @@ jobs:
       with:
         node-version: 24
     - run: npm ci
+    - run: npm run build:json
+    - run: git diff --exit-code -- component-definition.json component-models.json component-filters.json
+    - run: npm run test:authoring
     - run: npm run lint

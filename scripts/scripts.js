@@ -11,6 +11,15 @@ import {
   loadCSS,
   buildBlock,
 } from './aem.js';
+import {
+  decorateAuthoringSections,
+  decorateRichtext,
+  decorateSectionMetadata,
+  moveInstrumentation,
+  setupAuthoringCodeBase,
+} from './ue.js';
+
+setupAuthoringCodeBase(import.meta.url);
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -56,7 +65,7 @@ async function loadFonts() {
 function buildWidgetAutoBlocks(main) {
   const widgetLinks = [...main.querySelectorAll('a[href*="/widgets/"]')];
   widgetLinks.forEach((link) => {
-    if (link.closest('.widget')) return;
+    if (link.closest('.widget, [data-aue-resource]')) return;
     const newLink = link.cloneNode(true);
     const widgetBlock = buildBlock('widget', { elems: [newLink] });
     const p = link.closest('p');
@@ -78,9 +87,11 @@ function buildWidgetAutoBlocks(main) {
  * @param {Element} main The container element
  */
 function buildAutoBlocks(main) {
+  if (main.hasAttribute('data-aue-resource')) return;
   try {
     // auto load `*/fragments/*` references
-    const fragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
+    const fragments = [...main.querySelectorAll('a[href*="/fragments/"]')]
+      .filter((f) => !f.closest('.fragment, [data-aue-resource]'));
     if (fragments.length > 0) {
       // eslint-disable-next-line import/no-cycle
       import('../blocks/fragment/fragment.js').then(({ loadFragment }) => {
@@ -131,12 +142,15 @@ function decorateButtons(main) {
     if (strong && em) { // high-impact call-to-action
       a.classList.add('accent');
       const outer = strong.contains(em) ? strong : em;
+      moveInstrumentation(outer, a);
       outer.replaceWith(a);
     } else if (strong) {
       a.classList.add('primary');
+      moveInstrumentation(strong, a);
       strong.replaceWith(a);
     } else {
       a.classList.add('secondary');
+      moveInstrumentation(em, a);
       em.replaceWith(a);
     }
   });
@@ -150,9 +164,12 @@ function decorateButtons(main) {
 export function decorateMain(main) {
   decorateIcons(main);
   buildAutoBlocks(main);
-  decorateSections(main);
+  if (main.hasAttribute('data-aue-resource')) decorateAuthoringSections(main);
+  else decorateSections(main);
+  decorateSectionMetadata(main);
   decorateBlocks(main);
   decorateButtons(main);
+  decorateRichtext(main);
 }
 
 /**
@@ -165,8 +182,12 @@ async function loadEager(doc) {
   const main = doc.querySelector('main');
   if (main) {
     decorateMain(main);
+    if (main.hasAttribute('data-aue-resource')) {
+      await import('./editor-support.js');
+    }
     document.body.classList.add('appear');
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
+    const firstSection = main.querySelector('.section');
+    if (firstSection) await loadSection(firstSection, waitForFirstImage);
   }
 
   try {

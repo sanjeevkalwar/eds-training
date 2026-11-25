@@ -1,4 +1,5 @@
 import { fetchPlaceholders } from '../../scripts/placeholders.js';
+import { moveInstrumentation } from '../../scripts/ue.js';
 
 function updateActiveSlide(slide) {
   const block = slide.closest('.carousel');
@@ -36,7 +37,9 @@ function showSlide(block, slideIndex = 0) {
   let realSlideIndex = slideIndex < 0 ? slides.length - 1 : slideIndex;
   if (slideIndex >= slides.length) realSlideIndex = 0;
   const activeSlide = slides[realSlideIndex];
+  if (!activeSlide) return;
 
+  updateActiveSlide(activeSlide);
   activeSlide.querySelectorAll('a').forEach((link) => link.removeAttribute('tabindex'));
   block.querySelector('.carousel-slides').scrollTo({
     top: 0,
@@ -75,6 +78,7 @@ function bindEvents(block) {
 
 function createSlide(row, slideIndex, carouselId) {
   const slide = document.createElement('li');
+  moveInstrumentation(row, slide);
   slide.dataset.slideIndex = slideIndex;
   slide.setAttribute('id', `carousel-${carouselId}-slide-${slideIndex}`);
   slide.classList.add('carousel-slide');
@@ -97,6 +101,7 @@ export default async function decorate(block) {
   carouselId += 1;
   block.setAttribute('id', `carousel-${carouselId}`);
   const rows = block.querySelectorAll(':scope > div');
+  if (!rows.length) return;
   const isSingleSlide = rows.length < 2;
 
   const placeholders = await fetchPlaceholders();
@@ -122,10 +127,15 @@ export default async function decorate(block) {
 
     const slideNavButtons = document.createElement('div');
     slideNavButtons.classList.add('carousel-navigation-buttons');
-    slideNavButtons.innerHTML = `
-      <button type="button" class= "slide-prev" aria-label="${placeholders.previousSlide || 'Previous Slide'}"></button>
-      <button type="button" class="slide-next" aria-label="${placeholders.nextSlide || 'Next Slide'}"></button>
-    `;
+    ['prev', 'next'].forEach((direction) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `slide-${direction}`;
+      button.setAttribute('aria-label', direction === 'prev'
+        ? placeholders.previousSlide || 'Previous Slide'
+        : placeholders.nextSlide || 'Next Slide');
+      slideNavButtons.append(button);
+    });
 
     container.append(slideNavButtons);
   }
@@ -138,7 +148,10 @@ export default async function decorate(block) {
       const indicator = document.createElement('li');
       indicator.classList.add('carousel-slide-indicator');
       indicator.dataset.targetSlide = idx;
-      indicator.innerHTML = `<button type="button" aria-label="${placeholders.showSlide || 'Show Slide'} ${idx + 1} ${placeholders.of || 'of'} ${rows.length}"></button>`;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.setAttribute('aria-label', `${placeholders.showSlide || 'Show Slide'} ${idx + 1} ${placeholders.of || 'of'} ${rows.length}`);
+      indicator.append(button);
       slideIndicators.append(indicator);
     }
     row.remove();
@@ -150,4 +163,9 @@ export default async function decorate(block) {
   if (!isSingleSlide) {
     bindEvents(block);
   }
+  updateActiveSlide(slidesWrapper.firstElementChild);
+  block.addEventListener('aue:ui-select', (event) => {
+    const slide = event.target.closest('.carousel-slide');
+    if (slide) showSlide(block, Number(slide.dataset.slideIndex));
+  });
 }
