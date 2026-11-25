@@ -223,8 +223,42 @@
     ]
   },
   {
-    "id": "feature-card",
+    "id": "feature",
     "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "eyebrow",
+        "label": "Eyebrow",
+        "value": "NEW FEATURE"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "title",
+        "label": "Title",
+        "value": "Universal Editor"
+      },
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "description",
+        "label": "Description",
+        "value": "Create, customize, and manage all your content in one seamless editing experience."
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Feature Image"
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "accent",
+        "label": "Accent Color",
+        "value": "#7C3AED"
+      },
       {
         "component": "select",
         "valueType": "string",
@@ -287,39 +321,6 @@
             "value": "large"
           }
         ]
-      }
-    ]
-  },
-  {
-    "id": "feature",
-    "fields": [
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "eyebrow",
-        "label": "Eyebrow",
-        "value": "NEW FEATURE"
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "title",
-        "label": "Title",
-        "value": "Universal Editor"
-      },
-      {
-        "component": "richtext",
-        "valueType": "string",
-        "name": "description",
-        "label": "Description",
-        "value": "Create, customize, and manage all your content in one seamless editing experience."
-      },
-      {
-        "component": "text",
-        "valueType": "string",
-        "name": "accent",
-        "label": "Accent Color",
-        "value": "#7C3AED"
       }
     ]
   },
