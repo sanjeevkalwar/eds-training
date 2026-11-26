@@ -1,0 +1,103 @@
+/* media-list: photo beside a heading, intro, red-dot bullet list and CTA button
+   (source: .cta-list.v2 "Exclusive access" on /financial-professionals/get-appointed) */
+
+.media-list {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  color: #000;
+}
+
+.media-list .media-list-media {
+  padding: 15px 0;
+  line-height: 0;
+}
+
+.media-list .media-list-media picture,
+.media-list .media-list-media img {
+  display: block;
+  width: 100%;
+}
+
+.media-list .media-list-media img {
+  height: auto;
+  aspect-ratio: 720 / 600;
+  object-fit: cover;
+  border-radius: 0;
+}
+
+.media-list .media-list-content > * {
+  margin: 0;
+}
+
+.media-list .media-list-title {
+  margin: 0 0 10px;
+  color: var(--brand-plum);
+  font-family: var(--heading-font-family);
+  font-size: 27.2px;
+  font-weight: 700;
+  line-height: 35.2px;
+}
+
+.media-list .media-list-content p,
+.media-list .media-list-content li {
+  font-size: 15.2px;
+  line-height: 26px;
+}
+
+.media-list .media-list-content > ul {
+  margin: 15px 0 10px;
+  padding: 0 0 0 40px;
+  list-style: none;
+}
+
+.media-list .media-list-content li {
+  margin: 0 0 10px;
+}
+
+.media-list .media-list-content li::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin: 0 10px 5px -10px;
+  border-radius: 50%;
+  background-color: var(--brand-red);
+  vertical-align: baseline;
+}
+
+.media-list .media-list-content > .media-list-cta {
+  margin: 5px 0;
+}
+
+@media (width >= 900px) {
+  .media-list {
+    flex-direction: row;
+    padding: 35px 15px;
+  }
+
+  .media-list .media-list-media,
+  .media-list .media-list-content {
+    flex: 1 1 50%;
+    box-sizing: border-box;
+    padding: 20px;
+  }
+
+  .media-list .media-list-content {
+    padding: 20px 50px;
+  }
+
+  .media-list.image-right {
+    flex-direction: row-reverse;
+  }
+
+  .media-list .media-list-title {
+    font-size: 34px;
+    line-height: 44px;
+  }
+
+  .media-list .media-list-content p,
+  .media-list .media-list-content li {
+    font-size: 19px;
+  }
+}
