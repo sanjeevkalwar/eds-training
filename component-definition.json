@@ -7,11 +7,16 @@
         {
           "title": "Text",
           "id": "text",
+          "model": "text",
+          "filter": "text-rte",
           "plugins": {
             "xwalk": {
               "page": {
                 "resourceType": "core/franklin/components/text/v1/text",
-                "template": {}
+                "template": {
+                  "model": "text",
+                  "filter": "text-rte"
+                }
               }
             }
           }

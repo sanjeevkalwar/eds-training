@@ -41,13 +41,60 @@ test('compiled configuration resolves models, filters, and insertable blocks', a
     if (template.model) assert.ok(models.some(({ id }) => id === template.model));
     if (template.filter) assert.ok(filters.some(({ id }) => id === template.filter));
   });
-  filters.forEach(({ components: allowed }) => allowed.forEach((id) => {
+  filters.forEach(({ components: allowed = [] }) => allowed.forEach((id) => {
     // Column is a structural child provided by AEM's built-in columns component.
     assert.ok(ids.has(id) || id === 'column', `Unknown filtered component: ${id}`);
   }));
   const section = filters.find(({ id }) => id === 'section');
   ['hero', 'cards', 'columns', 'fragment', 'carousel', 'dynamic-dog-image', 'list-dynamic-artwork']
     .forEach((id) => assert.ok(section.components.includes(id)));
+});
+
+test('OOTB Text configures controlled styling fields and a restricted native RTE', async () => {
+  const definition = JSON.parse(await readFile(
+    new URL('../component-definition.json', import.meta.url),
+  ));
+  const models = JSON.parse(await readFile(
+    new URL('../component-models.json', import.meta.url),
+  ));
+  const filters = JSON.parse(await readFile(
+    new URL('../component-filters.json', import.meta.url),
+  ));
+  const text = definition.groups.flatMap(({ components }) => components)
+    .find(({ id }) => id === 'text');
+  const textModel = models.find(({ id }) => id === 'text');
+  const textFilter = filters.find(({ id }) => id === 'text-rte');
+
+  assert.equal(text.model, 'text');
+  assert.equal(text.filter, 'text-rte');
+  assert.equal(text.plugins.xwalk.page.template.model, 'text');
+  assert.equal(text.plugins.xwalk.page.template.filter, 'text-rte');
+  assert.equal(text.plugins.xwalk.page.resourceType, 'core/franklin/components/text/v1/text');
+
+  const fields = new Map(textModel.fields.map((field) => [field.name, field]));
+  assert.deepEqual([...fields.keys()], [
+    'text',
+    'fontFamily',
+    'fontSize',
+    'fontWeightBody',
+    'fontWeightHeading',
+    'textColor',
+    'textAlign',
+    'lineHeight',
+    'surfaceVariant',
+  ]);
+  assert.equal(fields.get('text').component, 'richtext');
+  assert.equal(fields.get('fontWeightHeading').options.find(({ value }) => value === '500'), undefined);
+  assert.equal(fields.has('letterSpacing'), false);
+  [...fields.values()].filter(({ component }) => component === 'select')
+    .forEach(({ options }) => assert.equal(options[0].value, ''));
+
+  const rteItems = Object.values(textFilter.rte.toolbar).flat();
+  assert.equal(rteItems.includes('text_color'), false);
+  assert.equal(rteItems.includes('classes'), false);
+  assert.ok(rteItems.includes('bold'));
+  assert.ok(rteItems.includes('link'));
+  assert.ok(rteItems.includes('bullet_list'));
 });
 
 test('AEM author loads code from the EDS origin, while same-origin base paths stay intact', () => {

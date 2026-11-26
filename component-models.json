@@ -1,5 +1,272 @@
 [
   {
+    "id": "text",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "text",
+        "label": "Text",
+        "value": ""
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "fontFamily",
+        "label": "Font Family",
+        "value": "",
+        "options": [
+          {
+            "name": "Default / Inherit",
+            "value": ""
+          },
+          {
+            "name": "Roboto",
+            "value": "body"
+          },
+          {
+            "name": "Roboto Condensed",
+            "value": "heading"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "fontSize",
+        "label": "Font Size",
+        "value": "",
+        "options": [
+          {
+            "name": "Default / Inherit",
+            "value": ""
+          },
+          {
+            "name": "Body Extra Small",
+            "value": "body-xs"
+          },
+          {
+            "name": "Body Small",
+            "value": "body-s"
+          },
+          {
+            "name": "Body Medium",
+            "value": "body-m"
+          },
+          {
+            "name": "Heading Extra Small",
+            "value": "heading-xs"
+          },
+          {
+            "name": "Heading Small",
+            "value": "heading-s"
+          },
+          {
+            "name": "Heading Medium",
+            "value": "heading-m"
+          },
+          {
+            "name": "Heading Large",
+            "value": "heading-l"
+          },
+          {
+            "name": "Heading Extra Large",
+            "value": "heading-xl"
+          },
+          {
+            "name": "Heading XXL",
+            "value": "heading-xxl"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "fontWeightBody",
+        "label": "Font Weight",
+        "value": "",
+        "description": "Available for Roboto.",
+        "condition": {
+          "or": [
+            {
+              "===": [
+                {
+                  "var": "fontFamily"
+                },
+                ""
+              ]
+            },
+            {
+              "===": [
+                {
+                  "var": "fontFamily"
+                },
+                "body"
+              ]
+            }
+          ]
+        },
+        "options": [
+          {
+            "name": "Default / Inherit",
+            "value": ""
+          },
+          {
+            "name": "Regular (400)",
+            "value": "400"
+          },
+          {
+            "name": "Medium (500)",
+            "value": "500"
+          },
+          {
+            "name": "Bold (700)",
+            "value": "700"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "fontWeightHeading",
+        "label": "Font Weight",
+        "value": "",
+        "description": "Available for Roboto Condensed.",
+        "condition": {
+          "===": [
+            {
+              "var": "fontFamily"
+            },
+            "heading"
+          ]
+        },
+        "options": [
+          {
+            "name": "Default / Inherit",
+            "value": ""
+          },
+          {
+            "name": "Bold (700)",
+            "value": "700"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "textColor",
+        "label": "Text Color",
+        "value": "",
+        "options": [
+          {
+            "name": "Default / Inherit",
+            "value": ""
+          },
+          {
+            "name": "Default Text",
+            "value": "text"
+          },
+          {
+            "name": "Dark Gray",
+            "value": "dark"
+          },
+          {
+            "name": "Link Blue",
+            "value": "link"
+          },
+          {
+            "name": "Deep Blue",
+            "value": "link-hover"
+          },
+          {
+            "name": "White for Dark Surfaces",
+            "value": "background"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "textAlign",
+        "label": "Text Alignment",
+        "value": "",
+        "options": [
+          {
+            "name": "Default / Inherit",
+            "value": ""
+          },
+          {
+            "name": "Left",
+            "value": "left"
+          },
+          {
+            "name": "Center",
+            "value": "center"
+          },
+          {
+            "name": "Right",
+            "value": "right"
+          },
+          {
+            "name": "Justify",
+            "value": "justify"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "lineHeight",
+        "label": "Line Height",
+        "value": "",
+        "options": [
+          {
+            "name": "Default / Inherit",
+            "value": ""
+          },
+          {
+            "name": "Body",
+            "value": "body"
+          },
+          {
+            "name": "Heading",
+            "value": "heading"
+          }
+        ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "surfaceVariant",
+        "label": "Surface Color",
+        "value": "",
+        "description": "Paired text and background colors preserve accessible contrast.",
+        "options": [
+          {
+            "name": "Default / Inherit",
+            "value": ""
+          },
+          {
+            "name": "Soft Light",
+            "value": "light"
+          },
+          {
+            "name": "Dark Gray",
+            "value": "dark"
+          },
+          {
+            "name": "Blue",
+            "value": "link"
+          },
+          {
+            "name": "Deep Blue",
+            "value": "link-hover"
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "page-metadata",
     "fields": [
       {
