@@ -38,7 +38,7 @@
       "components": [
         "text", "image", "button", "title", "hero", "cards", "columns",
         "fragment", "carousel", "dynamic-dog-image", "list-dynamic-artwork" , "feature-card",
-        "fragment", "carousel", "dynamic-dog-image", "list-dynamic-artwork", "media-list", "split-banner"
+        "fragment", "carousel", "dynamic-dog-image", "list-dynamic-artwork", "media-list", "split-banner", "cards-highlights"
       ]
     }
   ]

@@ -1,0 +1,177 @@
+/* cards-highlight: centered icon cards, title with a red rule, vertical dividers
+   (source: .cta-icon-card on /financial-professionals/get-appointed) */
+
+.cards-highlight > ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 15px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* card (source: .cta-icon-card > .contents, padding 10px) */
+.cards-highlight > ul > li {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  margin: 20px 0;
+  padding: 10px;
+  color: #000;
+  text-align: center;
+}
+
+/* icon (source: .icon-image, 56px on desktop) */
+.cards-highlight .cards-highlight-card-icon {
+  line-height: 0;
+}
+
+.cards-highlight .cards-highlight-card-icon p {
+  margin: 0;
+}
+
+.cards-highlight .cards-highlight-card-icon picture {
+  display: block;
+}
+
+.cards-highlight .cards-highlight-card-icon img {
+  display: block;
+  width: 44.8px;
+  height: 44.8px;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+/* body (source: .card-content, padding 10px) */
+.cards-highlight .cards-highlight-card-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: 10px;
+}
+
+/* title: full-width 4px red rule (source: .title > span border-bottom) */
+.cards-highlight .cards-highlight-card-body :is(h2, h3, h4, h5, h6) {
+  margin: 0;
+  padding: 0;
+  border-bottom: 4px solid var(--brand-red);
+  color: var(--brand-plum);
+  font-family: var(--heading-font-family);
+  font-size: 19.2px;
+  font-weight: 700;
+  line-height: 27.2px;
+}
+
+.cards-highlight .cards-highlight-card-body p {
+  margin: 15px 0 0;
+  font-size: 15.2px;
+  line-height: 20.8px;
+}
+
+/* arrow CTA: pushed to the card bottom so CTAs align across a row */
+.cards-highlight .cards-highlight-card-body p:has(> a:only-child) {
+  margin-top: auto;
+  padding-top: 15px;
+}
+
+main .cards-highlight .cards-highlight-card-body a:any-link,
+main .cards-highlight .cards-highlight-card-body a.button:any-link {
+  display: inline-block;
+  position: relative;
+  margin: 0;
+  padding: 3px 0 0 22px;
+  border: 0;
+  background: none;
+  color: #000;
+  font-size: 15.2px;
+  font-weight: 600;
+  line-height: 20.8px;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: underline 1px;
+  text-underline-offset: auto;
+  white-space: normal;
+}
+
+main .cards-highlight .cards-highlight-card-body a:hover,
+main .cards-highlight .cards-highlight-card-body a:focus-visible {
+  color: #000;
+  text-decoration-thickness: 2px;
+}
+
+main .cards-highlight .cards-highlight-card-body a:any-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1em;
+  height: 20.8px;
+  background-color: var(--brand-red);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm0 48C145.5 56 56 145.5 56 256s89.5 200 200 200 200-89.5 200-200S366.5 56 256 56zm12.5 92.5 99 99c4.7 4.7 4.7 12.3 0 17l-99 99c-4.7 4.7-12.3 4.7-17 0l-11.3-11.3c-4.8-4.8-4.7-12.5.2-17.2l58.7-56H140c-6.6 0-12-5.4-12-12v-16c0-6.6 5.4-12 12-12h159.1l-58.7-56c-4.9-4.7-5-12.4-.2-17.2l11.3-11.3c4.7-4.7 12.3-4.7 17 0z'/%3E%3C/svg%3E") center / 1em 1em no-repeat;
+}
+
+@media (width >= 600px) {
+  .cards-highlight .cards-highlight-card-body :is(h2, h3, h4, h5, h6) {
+    font-size: 24px;
+    line-height: 34px;
+  }
+
+  .cards-highlight .cards-highlight-card-body p {
+    font-size: 19px;
+    line-height: 26px;
+  }
+
+  main .cards-highlight .cards-highlight-card-body a:any-link,
+  main .cards-highlight .cards-highlight-card-body a.button:any-link {
+    font-size: 19px;
+    line-height: 26px;
+  }
+
+  main .cards-highlight .cards-highlight-card-body a:any-link::before {
+    height: 26px;
+  }
+}
+
+/* source content area has a 32px gutter from 768px; the section gutter is 20px */
+@media (width >= 768px) {
+  .cards-highlight > ul {
+    padding: 0 12px;
+  }
+
+  .cards-highlight > ul > li {
+    width: calc(100% - 40px);
+    margin: 20px;
+  }
+}
+
+@media (width >= 900px) {
+  .cards-highlight > ul {
+    flex-wrap: nowrap;
+  }
+
+  .cards-highlight > ul > li {
+    flex: 1 1 0;
+    width: auto;
+    min-width: 0;
+  }
+
+  /* thin light-grey divider between cards (source: .cta-icon-card::before, #ccc) */
+  .cards-highlight > ul > li + li::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -20px;
+    width: 1px;
+    height: 100%;
+    background-color: #ccc;
+  }
+}
+
+@media (width >= 1200px) {
+  .cards-highlight .cards-highlight-card-icon img {
+    width: 56px;
+    height: 56px;
+  }
+}
