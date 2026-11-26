@@ -19,6 +19,7 @@
       "carousel",
       "dynamic-dog-image",
       "list-dynamic-artwork",
+      "feature-card",
       "media-list"
     ]
   },
@@ -47,6 +48,12 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "feature-card",
+    "components": [
+      "feature"
     ]
   }
 ]
