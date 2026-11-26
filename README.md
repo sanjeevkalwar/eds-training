@@ -134,6 +134,13 @@ size, font weight, text color, and text alignment independently for each Styled
 Text instance. Select **Default / Inherit** to retain the site's existing style.
 Only values backed by existing typography and color tokens are available.
 
+Content uses the same native Universal Editor RTE capabilities as normal text:
+paragraphs and headings, bold, italic, underline, strike-through, inline code,
+ordered and unordered lists, links, images, tables, alignment, direction,
+indentation, superscript/subscript, paste, remove formatting, and full-screen
+editing. The Content area is instrumented for in-context editing; authors can
+select only specific words and apply native inline formatting.
+
 Roboto supports weights 400, 500, and 700. Roboto Condensed supports 700 only;
 selecting an incompatible explicit weight is corrected to 700 during decoration.
 The block preserves the authored semantic rich text and Universal Editor

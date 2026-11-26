@@ -42,7 +42,7 @@ test('compiled configuration resolves models, filters, and insertable blocks', a
     if (template.model) assert.ok(models.some(({ id }) => id === template.model));
     if (template.filter) assert.ok(filters.some(({ id }) => id === template.filter));
   });
-  filters.forEach(({ components: allowed }) => allowed.forEach((id) => {
+  filters.forEach(({ components: allowed = [] }) => allowed.forEach((id) => {
     // Column is a structural child provided by AEM's built-in columns component.
     assert.ok(ids.has(id) || id === 'column', `Unknown filtered component: ${id}`);
   }));
@@ -63,11 +63,16 @@ test('Styled Text is additive and leaves OOTB Text unchanged', async () => {
   const text = components.find(({ id }) => id === 'text');
   const styledText = components.find(({ id }) => id === 'styled-text');
   const model = models.find(({ id }) => id === 'styled-text');
+  const filters = JSON.parse(await readFile(
+    new URL('../component-filters.json', import.meta.url),
+  ));
+  const rteFilter = filters.find(({ id }) => id === 'styled-text-rte');
 
   assert.equal(text.model, undefined);
   assert.equal(text.filter, undefined);
   assert.deepEqual(text.plugins.xwalk.page.template, {});
   assert.equal(styledText.title, 'Styled Text');
+  assert.equal(styledText.filter, 'styled-text-rte');
   assert.equal(styledText.plugins.xwalk.page.template['key-value'], true);
   assert.equal(models.some(({ id }) => id === 'text'), false);
 
@@ -87,6 +92,10 @@ test('Styled Text is additive and leaves OOTB Text unchanged', async () => {
   fields.get('textColor').options.forEach(({ name }) => {
     assert.notEqual(name, 'White for Dark Surfaces');
   });
+  const rteItems = Object.values(rteFilter.rte.toolbar).flat();
+  ['bold', 'italic', 'underline', 'ordered_list', 'bullet_list', 'link', 'unlink',
+    'image', 'table', 'paragraph', 'h1']
+    .forEach((action) => assert.ok(rteItems.includes(action), `Missing RTE action: ${action}`));
 });
 
 test('AEM author loads code from the EDS origin, while same-origin base paths stay intact', () => {
@@ -264,7 +273,6 @@ test('styled text preserves richtext and applies independent token-based options
   </div>`);
 
   decorateStyledText(block);
-  decorateRichtext(block);
 
   assert.equal(block.children.length, 1);
   assert.ok(block.classList.contains('styled-text-font-family-heading'));

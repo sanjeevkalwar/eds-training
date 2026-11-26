@@ -1,4 +1,4 @@
-import { moveInstrumentation } from '../../scripts/ue.js';
+import { decorateRichtext, moveInstrumentation } from '../../scripts/ue.js';
 
 const ALLOWED_VALUES = {
   fontFamily: new Set(['body', 'heading']),
@@ -73,4 +73,5 @@ export default function decorate(block) {
     if (value) block.classList.add(`styled-text-${normalizeKey(name)}-${value}`);
   });
   block.replaceChildren(content);
+  decorateRichtext(block);
 }

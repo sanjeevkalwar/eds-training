@@ -223,6 +223,7 @@
         {
           "title": "Styled Text",
           "id": "styled-text",
+          "filter": "styled-text-rte",
           "plugins": {
             "xwalk": {
               "page": {
@@ -230,6 +231,7 @@
                 "template": {
                   "name": "Styled Text",
                   "model": "styled-text",
+                  "filter": "styled-text-rte",
                   "key-value": true,
                   "content": ""
                 }
