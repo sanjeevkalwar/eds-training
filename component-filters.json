@@ -20,7 +20,12 @@
       "dynamic-dog-image",
       "list-dynamic-artwork",
       "feature-card",
-      "media-list"
+      "fragment",
+      "carousel",
+      "dynamic-dog-image",
+      "list-dynamic-artwork",
+      "media-list",
+      "split-banner"
     ]
   },
   {
