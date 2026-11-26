@@ -25,7 +25,14 @@
       "dynamic-dog-image",
       "list-dynamic-artwork",
       "media-list",
-      "split-banner"
+      "split-banner",
+      "accordion"
+    ]
+  },
+  {
+    "id": "accordion",
+    "components": [
+      "accordion"
     ]
   },
   {

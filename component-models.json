@@ -142,6 +142,23 @@
     ]
   },
   {
+    "id": "accordion",
+    "fields": [
+      {
+        "component": "text",
+        "name": "question",
+        "label": "Question",
+        "value": "What is AEM?"
+      },
+      {
+        "component": "richtext",
+        "name": "answer",
+        "label": "Answer",
+        "value": "AEM is Adobe Experience Manager."
+      }
+    ]
+  },
+  {
     "id": "card",
     "fields": [
       {
