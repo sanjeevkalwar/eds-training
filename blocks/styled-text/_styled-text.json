@@ -1,0 +1,109 @@
+{
+  "definitions": [
+    {
+      "title": "Styled Text",
+      "id": "styled-text",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block",
+            "template": {
+              "name": "Styled Text",
+              "model": "styled-text",
+              "key-value": true,
+              "content": ""
+            }
+          }
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "styled-text",
+      "fields": [
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "content",
+          "label": "Content",
+          "value": ""
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "fontFamily",
+          "label": "Font Family",
+          "value": "",
+          "options": [
+            { "name": "Default / Inherit", "value": "" },
+            { "name": "Roboto", "value": "body" },
+            { "name": "Roboto Condensed", "value": "heading" }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "fontSize",
+          "label": "Font Size",
+          "value": "",
+          "options": [
+            { "name": "Default / Inherit", "value": "" },
+            { "name": "Body Extra Small", "value": "body-xs" },
+            { "name": "Body Small", "value": "body-s" },
+            { "name": "Body Medium", "value": "body-m" },
+            { "name": "Heading Extra Small", "value": "heading-xs" },
+            { "name": "Heading Small", "value": "heading-s" },
+            { "name": "Heading Medium", "value": "heading-m" },
+            { "name": "Heading Large", "value": "heading-l" },
+            { "name": "Heading Extra Large", "value": "heading-xl" },
+            { "name": "Heading XXL", "value": "heading-xxl" }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "fontWeight",
+          "label": "Font Weight",
+          "value": "",
+          "description": "Roboto supports 400, 500, and 700. Roboto Condensed supports 700 only.",
+          "options": [
+            { "name": "Default / Inherit", "value": "" },
+            { "name": "Regular (400)", "value": "400" },
+            { "name": "Medium (500)", "value": "500" },
+            { "name": "Bold (700)", "value": "700" }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "textColor",
+          "label": "Text Color",
+          "value": "",
+          "description": "All explicit options meet WCAG AA on the inherited white page background.",
+          "options": [
+            { "name": "Default / Inherit", "value": "" },
+            { "name": "Default Text", "value": "text" },
+            { "name": "Dark Gray", "value": "dark" },
+            { "name": "Link Blue", "value": "link" },
+            { "name": "Deep Blue", "value": "link-hover" }
+          ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "textAlign",
+          "label": "Text Alignment",
+          "value": "",
+          "options": [
+            { "name": "Default / Inherit", "value": "" },
+            { "name": "Left", "value": "left" },
+            { "name": "Center", "value": "center" },
+            { "name": "Right", "value": "right" }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

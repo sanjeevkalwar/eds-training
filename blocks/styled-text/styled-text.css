@@ -1,0 +1,101 @@
+.styled-text-content {
+  overflow-wrap: anywhere;
+}
+
+.styled-text-font-family-body .styled-text-content,
+.styled-text-font-family-body .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--body-font-family);
+}
+
+.styled-text-font-family-heading .styled-text-content,
+.styled-text-font-family-heading .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-family: var(--heading-font-family);
+}
+
+.styled-text-font-size-body-xs .styled-text-content,
+.styled-text-font-size-body-xs .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--body-font-size-xs);
+}
+
+.styled-text-font-size-body-s .styled-text-content,
+.styled-text-font-size-body-s .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--body-font-size-s);
+}
+
+.styled-text-font-size-body-m .styled-text-content,
+.styled-text-font-size-body-m .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--body-font-size-m);
+}
+
+.styled-text-font-size-heading-xs .styled-text-content,
+.styled-text-font-size-heading-xs .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--heading-font-size-xs);
+}
+
+.styled-text-font-size-heading-s .styled-text-content,
+.styled-text-font-size-heading-s .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--heading-font-size-s);
+}
+
+.styled-text-font-size-heading-m .styled-text-content,
+.styled-text-font-size-heading-m .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--heading-font-size-m);
+}
+
+.styled-text-font-size-heading-l .styled-text-content,
+.styled-text-font-size-heading-l .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--heading-font-size-l);
+}
+
+.styled-text-font-size-heading-xl .styled-text-content,
+.styled-text-font-size-heading-xl .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--heading-font-size-xl);
+}
+
+.styled-text-font-size-heading-xxl .styled-text-content,
+.styled-text-font-size-heading-xxl .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-size: var(--heading-font-size-xxl);
+}
+
+.styled-text-font-weight-400 .styled-text-content,
+.styled-text-font-weight-400 .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-weight: 400;
+}
+
+.styled-text-font-weight-500 .styled-text-content,
+.styled-text-font-weight-500 .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-weight: 500;
+}
+
+.styled-text-font-weight-700 .styled-text-content,
+.styled-text-font-weight-700 .styled-text-content :is(h1, h2, h3, h4, h5, h6) {
+  font-weight: 700;
+}
+
+.styled-text-text-color-text .styled-text-content {
+  color: var(--text-color);
+}
+
+.styled-text-text-color-dark .styled-text-content {
+  color: var(--dark-color);
+}
+
+.styled-text-text-color-link .styled-text-content {
+  color: var(--link-color);
+}
+
+.styled-text-text-color-link-hover .styled-text-content {
+  color: var(--link-hover-color);
+}
+
+.styled-text-text-align-left .styled-text-content {
+  text-align: left;
+}
+
+.styled-text-text-align-center .styled-text-content {
+  text-align: center;
+}
+
+.styled-text-text-align-right .styled-text-content {
+  text-align: right;
+}

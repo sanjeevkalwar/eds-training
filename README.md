@@ -123,6 +123,72 @@ paths specified by page metadata). Create and preview those pages in the chosen
 content source. They currently return 404 on this repository's preview, so local
 testing reports header/footer loading errors until that content is supplied.
 
+### Styled Text
+
+`Styled Text` is an optional XWalk block for content that needs component-level
+typography beyond the OOTB Text component. The existing Text component remains in
+the picker and keeps its native Universal Editor rich text behavior.
+
+Authors can configure the native `Content` rich text field, font family, font
+size, font weight, text color, and text alignment independently for each Styled
+Text instance. Select **Default / Inherit** to retain the site's existing style.
+Only values backed by existing typography and color tokens are available.
+
+Roboto supports weights 400, 500, and 700. Roboto Condensed supports 700 only;
+selecting an incompatible explicit weight is corrected to 700 during decoration.
+The block preserves the authored semantic rich text and Universal Editor
+instrumentation rather than rebuilding the content as HTML.
+
+The block is a key-value XWalk model so each configuration property is delivered
+with a stable name:
+
+| Property | Purpose |
+| --- | --- |
+| `content` | Native semantic rich text |
+| `fontFamily` | Default, Roboto, or Roboto Condensed |
+| `fontSize` | Existing body or heading size tokens |
+| `fontWeight` | Existing 400, 500, or 700 weights |
+| `textColor` | Existing text, dark, link, or hover-link color |
+| `textAlign` | Default, left, center, or right |
+
+Author-facing values map to existing tokens as follows:
+
+| Author option | Stored value | CSS token |
+| --- | --- | --- |
+| Roboto | `body` | `--body-font-family` |
+| Roboto Condensed | `heading` | `--heading-font-family` |
+| Body Extra Small | `body-xs` | `--body-font-size-xs` |
+| Body Small | `body-s` | `--body-font-size-s` |
+| Body Medium | `body-m` | `--body-font-size-m` |
+| Heading Extra Small through Heading XXL | `heading-xs` through `heading-xxl` | Corresponding `--heading-font-size-*` token |
+| Default Text | `text` | `--text-color` (`#131313`) |
+| Dark Gray | `dark` | `--dark-color` (`#505050`) |
+| Link Blue | `link` | `--link-color` (`#3b63fb`) |
+| Deep Blue | `link-hover` | `--link-hover-color` (`#1d3ecf`) |
+
+All explicit text colors meet the normal-text WCAG AA contrast threshold against
+the default white inherited page surface. Validation against a page-specific
+non-white background still requires rendered-page testing; Styled Text does not
+provide a background control.
+
+#### POC demonstration
+
+1. Add an OOTB Text component and retain all default styling.
+2. Add a Styled Text block with every option set to **Default / Inherit**.
+3. Add a second Styled Text block with Roboto Condensed, a heading size, 700,
+   Dark Gray, and Center alignment.
+4. Use bold, italic, a link, and a list in either Styled Text instance.
+5. Save and reopen the test page, then verify every value persists.
+6. Preview the branch and confirm the three components render independently.
+7. Do not publish to live or merge the feature branch.
+
+The initial OOTB Text styling spike confirmed that its native rich text remained
+available in this AEM environment, but the core
+`core/franklin/components/text/v1/text` component did not expose the added
+properties-panel model. Styled Text therefore uses the supported
+`core/franklin/components/block/v1/block` model/field flow while leaving OOTB Text
+unchanged.
+
 For branch testing, append `?ref=<branch>` to the **author canvas URL** in Universal
 Editor. A PR must include the matching
 `https://<branch>--eds-training--sanjeevkalwar.aem.page/<path>` test link.

@@ -19,6 +19,7 @@ const { default: decorateColumns } = await import('../blocks/columns/columns.js'
 const { default: decorateCarousel } = await import('../blocks/carousel/carousel.js');
 const { default: decorateWinners } = await import('../blocks/list-dynamic-artwork/list-dynamic-artwork.js');
 const { default: decorateDog } = await import('../blocks/dynamic-dog-image/dynamic-dog-image.js');
+const { default: decorateStyledText } = await import('../blocks/styled-text/styled-text.js');
 
 function element(html) {
   const container = document.createElement('div');
@@ -48,6 +49,44 @@ test('compiled configuration resolves models, filters, and insertable blocks', a
   const section = filters.find(({ id }) => id === 'section');
   ['hero', 'cards', 'columns', 'fragment', 'carousel', 'dynamic-dog-image', 'list-dynamic-artwork']
     .forEach((id) => assert.ok(section.components.includes(id)));
+  assert.ok(section.components.includes('styled-text'));
+});
+
+test('Styled Text is additive and leaves OOTB Text unchanged', async () => {
+  const definition = JSON.parse(await readFile(
+    new URL('../component-definition.json', import.meta.url),
+  ));
+  const models = JSON.parse(await readFile(
+    new URL('../component-models.json', import.meta.url),
+  ));
+  const components = definition.groups.flatMap(({ components: group }) => group);
+  const text = components.find(({ id }) => id === 'text');
+  const styledText = components.find(({ id }) => id === 'styled-text');
+  const model = models.find(({ id }) => id === 'styled-text');
+
+  assert.equal(text.model, undefined);
+  assert.equal(text.filter, undefined);
+  assert.deepEqual(text.plugins.xwalk.page.template, {});
+  assert.equal(styledText.title, 'Styled Text');
+  assert.equal(styledText.plugins.xwalk.page.template['key-value'], true);
+  assert.equal(models.some(({ id }) => id === 'text'), false);
+
+  const fields = new Map(model.fields.map((field) => [field.name, field]));
+  assert.deepEqual([...fields.keys()], [
+    'content',
+    'fontFamily',
+    'fontSize',
+    'fontWeight',
+    'textColor',
+    'textAlign',
+  ]);
+  assert.equal(fields.get('content').component, 'richtext');
+  assert.equal(fields.has('lineHeight'), false);
+  assert.equal(fields.has('letterSpacing'), false);
+  assert.equal(fields.has('surfaceVariant'), false);
+  fields.get('textColor').options.forEach(({ name }) => {
+    assert.notEqual(name, 'White for Dark Surfaces');
+  });
 });
 
 test('AEM author loads code from the EDS origin, while same-origin base paths stay intact', () => {
@@ -207,6 +246,74 @@ test('dynamic dog heading stays editable after its authored row is replaced', as
   assert.equal(block.querySelector('h2').textContent, 'My dog');
   assert.equal(block.querySelector('h2').dataset.aueProp, 'heading');
   assert.equal(block.dataset.aueResource, 'urn:dog');
+});
+
+test('styled text preserves richtext and applies independent token-based options', (t) => {
+  const warn = t.mock.method(console, 'warn', () => {});
+  const block = element(`<div class="styled-text" data-aue-resource="urn:styled">
+    <div><div>content</div><div data-aue-prop="content" data-aue-type="richtext">
+      <p data-richtext-resource="urn:styled" data-richtext-prop="content">
+        A <strong>formatted</strong> paragraph.
+      </p>
+    </div></div>
+    <div><div>fontFamily</div><div>heading</div></div>
+    <div><div>fontSize</div><div>heading-l</div></div>
+    <div><div>fontWeight</div><div>500</div></div>
+    <div><div>textColor</div><div>dark</div></div>
+    <div><div>textAlign</div><div>center</div></div>
+  </div>`);
+
+  decorateStyledText(block);
+  decorateRichtext(block);
+
+  assert.equal(block.children.length, 1);
+  assert.ok(block.classList.contains('styled-text-font-family-heading'));
+  assert.ok(block.classList.contains('styled-text-font-size-heading-l'));
+  assert.ok(block.classList.contains('styled-text-font-weight-700'));
+  assert.ok(block.classList.contains('styled-text-text-color-dark'));
+  assert.ok(block.classList.contains('styled-text-text-align-center'));
+  assert.equal(block.querySelector('strong').textContent, 'formatted');
+  assert.equal(block.querySelector('[data-aue-type="richtext"]').dataset.aueProp, 'content');
+  assert.equal(warn.mock.callCount(), 1);
+});
+
+test('styled text defaults safely and ignores invalid values', (t) => {
+  const warn = t.mock.method(console, 'warn', () => {});
+  const block = element(`<div class="styled-text">
+    <div><div>content</div><div><p>Default text</p></div></div>
+    <div><div>fontFamily</div><div>unknown-font</div></div>
+    <div><div>fontWeight</div><div>900</div></div>
+    <div><div>textColor</div><div>dangerous</div></div>
+  </div>`);
+
+  decorateStyledText(block);
+
+  assert.equal(block.querySelector('.styled-text-content').textContent, 'Default text');
+  assert.equal(block.classList.length, 1);
+  assert.equal(warn.mock.callCount(), 3);
+});
+
+test('styled text instances keep independent configurations', () => {
+  const first = element(`<div class="styled-text">
+    <div><div>content</div><div><p>First</p></div></div>
+    <div><div>fontFamily</div><div>body</div></div>
+    <div><div>textColor</div><div>link</div></div>
+  </div>`);
+  const second = element(`<div class="styled-text">
+    <div><div>content</div><div><p>Second</p></div></div>
+    <div><div>fontFamily</div><div>heading</div></div>
+    <div><div>textColor</div><div>dark</div></div>
+  </div>`);
+
+  decorateStyledText(first);
+  decorateStyledText(second);
+
+  assert.ok(first.classList.contains('styled-text-font-family-body'));
+  assert.ok(first.classList.contains('styled-text-text-color-link'));
+  assert.equal(first.classList.contains('styled-text-font-family-heading'), false);
+  assert.ok(second.classList.contains('styled-text-font-family-heading'));
+  assert.ok(second.classList.contains('styled-text-text-color-dark'));
+  assert.equal(second.classList.contains('styled-text-text-color-link'), false);
 });
 
 test('saved editor operations refresh before the CORS library can patch decorated markup', async () => {
