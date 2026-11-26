@@ -1,0 +1,138 @@
+/* split-banner: tinted band, text beside a wide photo
+   (source: .comparison-highlight-layout on /financial-professionals/get-appointed) */
+
+.split-banner {
+  --split-banner-bg: #f1ece9;
+
+  display: flex;
+  flex-direction: column;
+  background-color: var(--split-banner-bg);
+  color: #000;
+}
+
+.split-banner .split-banner-content {
+  padding: 35px 20px;
+}
+
+.split-banner .split-banner-content > * {
+  margin: 0;
+}
+
+.split-banner .split-banner-title {
+  color: var(--brand-red);
+  font-family: var(--heading-font-family);
+  font-size: 36.8px;
+  font-weight: 700;
+  line-height: 44.8px;
+}
+
+.split-banner .split-banner-content > p {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.split-banner .split-banner-content strong,
+.split-banner .split-banner-content b {
+  font-weight: 700;
+}
+
+/* arrow CTA (same pattern as cards-icon) */
+.split-banner .split-banner-content > .split-banner-cta {
+  margin-top: 20px;
+}
+
+main .split-banner .split-banner-cta a:any-link {
+  display: inline-block;
+  position: relative;
+  padding: 3px 0 0 22px;
+  color: #000;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 24px;
+  text-transform: uppercase;
+  text-decoration: underline 1px;
+}
+
+main .split-banner .split-banner-cta a:hover,
+main .split-banner .split-banner-cta a:focus-visible {
+  color: #000;
+  text-decoration-thickness: 2px;
+}
+
+main .split-banner .split-banner-cta a:any-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1em;
+  height: 27px;
+  background-color: var(--brand-red);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M256 8c137 0 248 111 248 248S393 504 256 504 8 393 8 256 119 8 256 8zm0 48C145.5 56 56 145.5 56 256s89.5 200 200 200 200-89.5 200-200S366.5 56 256 56zm12.5 92.5 99 99c4.7 4.7 4.7 12.3 0 17l-99 99c-4.7 4.7-12.3 4.7-17 0l-11.3-11.3c-4.8-4.8-4.7-12.5.2-17.2l58.7-56H140c-6.6 0-12-5.4-12-12v-16c0-6.6 5.4-12 12-12h159.1l-58.7-56c-4.9-4.7-5-12.4-.2-17.2l11.3-11.3c4.7-4.7 12.3-4.7 17 0z'/%3E%3C/svg%3E") center / 1em 1em no-repeat;
+}
+
+.split-banner .split-banner-media {
+  line-height: 0;
+}
+
+.split-banner .split-banner-media picture,
+.split-banner .split-banner-media img {
+  display: block;
+  width: 100%;
+}
+
+.split-banner .split-banner-media img {
+  height: auto;
+  aspect-ratio: 620 / 275;
+  object-fit: cover;
+}
+
+@media (width >= 900px) {
+  .split-banner {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 35px 15px;
+  }
+
+  .split-banner .split-banner-content,
+  .split-banner .split-banner-media {
+    flex: 1 1 50%;
+    box-sizing: border-box;
+    padding: 20px;
+  }
+
+  .split-banner .split-banner-content {
+    padding-left: 40px;
+  }
+
+  .split-banner .split-banner-media {
+    display: flex;
+    align-items: center;
+  }
+
+  .split-banner.image-left {
+    flex-direction: row-reverse;
+  }
+
+  .split-banner.image-left .split-banner-content {
+    padding-left: 20px;
+  }
+
+  .split-banner .split-banner-title {
+    font-size: 46px;
+    line-height: 56px;
+  }
+
+  .split-banner .split-banner-content > p {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  main .split-banner .split-banner-cta a:any-link {
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  main .split-banner .split-banner-cta a:any-link::before {
+    height: 33px;
+  }
+}
