@@ -269,7 +269,8 @@ test('styled text preserves richtext and applies independent token-based options
   const block = element(`<div class="styled-text" data-aue-resource="urn:styled">
     <div><div>content</div><div data-aue-prop="content" data-aue-type="richtext">
       <p data-richtext-resource="urn:styled" data-richtext-prop="content">
-        A <strong>formatted</strong> paragraph.
+        A <strong>formatted</strong> paragraph with a
+        <span class="styled-text-inline-color-link">blue phrase</span>.
       </p>
     </div></div>
     <div><div>fontFamily</div><div>heading</div></div>
@@ -290,6 +291,10 @@ test('styled text preserves richtext and applies independent token-based options
   assert.ok(block.classList.contains('styled-text-text-align-center'));
   assert.ok(block.classList.contains('styled-text-background-color-light'));
   assert.equal(block.querySelector('strong').textContent, 'formatted');
+  assert.equal(
+    block.querySelector('.styled-text-inline-color-link').textContent,
+    'blue phrase',
+  );
   assert.equal(block.querySelector('[data-aue-type="richtext"]').dataset.aueProp, 'content');
   assert.equal(warn.mock.callCount(), 1);
 });
