@@ -100,6 +100,9 @@
           "superscript",
           "subscript"
         ],
+        "advanced": [
+          "classes"
+        ],
         "editor": [
           "removeformat",
           "clean_unsupported_tags",
@@ -116,8 +119,33 @@
           "list",
           "insert",
           "sr_script",
+          "advanced",
           "editor"
         ]
+      },
+      "actions": {
+        "classes": {
+          "label": "Text Color",
+          "showMarkers": true,
+          "options": [
+            {
+              "label": "Default Text",
+              "value": "styled-text-inline-color-text"
+            },
+            {
+              "label": "Dark Gray",
+              "value": "styled-text-inline-color-dark"
+            },
+            {
+              "label": "Link Blue",
+              "value": "styled-text-inline-color-link"
+            },
+            {
+              "label": "Deep Blue",
+              "value": "styled-text-inline-color-link-hover"
+            }
+          ]
+        }
       }
     }
   }

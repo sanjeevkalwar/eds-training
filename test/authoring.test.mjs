@@ -84,6 +84,7 @@ test('Styled Text is additive and leaves OOTB Text unchanged', async () => {
     'fontWeight',
     'textColor',
     'textAlign',
+    'backgroundColor',
   ]);
   assert.equal(fields.get('content').component, 'richtext');
   assert.equal(fields.has('lineHeight'), false);
@@ -94,8 +95,14 @@ test('Styled Text is additive and leaves OOTB Text unchanged', async () => {
   });
   const rteItems = Object.values(rteFilter.rte.toolbar).flat();
   ['bold', 'italic', 'underline', 'ordered_list', 'bullet_list', 'link', 'unlink',
-    'image', 'table', 'paragraph', 'h1']
+    'image', 'table', 'paragraph', 'h1', 'classes']
     .forEach((action) => assert.ok(rteItems.includes(action), `Missing RTE action: ${action}`));
+  assert.deepEqual(rteFilter.rte.actions.classes.options.map(({ value }) => value), [
+    'styled-text-inline-color-text',
+    'styled-text-inline-color-dark',
+    'styled-text-inline-color-link',
+    'styled-text-inline-color-link-hover',
+  ]);
 });
 
 test('AEM author loads code from the EDS origin, while same-origin base paths stay intact', () => {
@@ -270,6 +277,7 @@ test('styled text preserves richtext and applies independent token-based options
     <div><div>fontWeight</div><div>500</div></div>
     <div><div>textColor</div><div>dark</div></div>
     <div><div>textAlign</div><div>center</div></div>
+    <div><div>backgroundColor</div><div>light</div></div>
   </div>`);
 
   decorateStyledText(block);
@@ -280,6 +288,7 @@ test('styled text preserves richtext and applies independent token-based options
   assert.ok(block.classList.contains('styled-text-font-weight-700'));
   assert.ok(block.classList.contains('styled-text-text-color-dark'));
   assert.ok(block.classList.contains('styled-text-text-align-center'));
+  assert.ok(block.classList.contains('styled-text-background-color-light'));
   assert.equal(block.querySelector('strong').textContent, 'formatted');
   assert.equal(block.querySelector('[data-aue-type="richtext"]').dataset.aueProp, 'content');
   assert.equal(warn.mock.callCount(), 1);
@@ -292,13 +301,14 @@ test('styled text defaults safely and ignores invalid values', (t) => {
     <div><div>fontFamily</div><div>unknown-font</div></div>
     <div><div>fontWeight</div><div>900</div></div>
     <div><div>textColor</div><div>dangerous</div></div>
+    <div><div>backgroundColor</div><div>dark</div></div>
   </div>`);
 
   decorateStyledText(block);
 
   assert.equal(block.querySelector('.styled-text-content').textContent, 'Default text');
   assert.equal(block.classList.length, 1);
-  assert.equal(warn.mock.callCount(), 3);
+  assert.equal(warn.mock.callCount(), 4);
 });
 
 test('styled text instances keep independent configurations', () => {

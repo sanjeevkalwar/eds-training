@@ -103,6 +103,19 @@
             { "name": "Center", "value": "center" },
             { "name": "Right", "value": "right" }
           ]
+        },
+        {
+          "component": "select",
+          "valueType": "string",
+          "name": "backgroundColor",
+          "label": "Background Color",
+          "value": "",
+          "description": "Only light surfaces are available so inherited text remains WCAG AA readable.",
+          "options": [
+            { "name": "Default / Inherit", "value": "" },
+            { "name": "White", "value": "white" },
+            { "name": "Soft Light", "value": "light" }
+          ]
         }
       ]
     }
@@ -120,6 +133,7 @@
           "list": ["bullet_list", "ordered_list"],
           "insert": ["link", "unlink", "image", "table", "special_characters"],
           "sr_script": ["superscript", "subscript"],
+          "advanced": ["classes"],
           "editor": [
             "removeformat",
             "clean_unsupported_tags",
@@ -136,8 +150,21 @@
             "list",
             "insert",
             "sr_script",
+            "advanced",
             "editor"
           ]
+        },
+        "actions": {
+          "classes": {
+            "label": "Text Color",
+            "showMarkers": true,
+            "options": [
+              { "label": "Default Text", "value": "styled-text-inline-color-text" },
+              { "label": "Dark Gray", "value": "styled-text-inline-color-dark" },
+              { "label": "Link Blue", "value": "styled-text-inline-color-link" },
+              { "label": "Deep Blue", "value": "styled-text-inline-color-link-hover" }
+            ]
+          }
         }
       }
     }

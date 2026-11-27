@@ -516,6 +516,28 @@
             "value": "right"
           }
         ]
+      },
+      {
+        "component": "select",
+        "valueType": "string",
+        "name": "backgroundColor",
+        "label": "Background Color",
+        "value": "",
+        "description": "Only light surfaces are available so inherited text remains WCAG AA readable.",
+        "options": [
+          {
+            "name": "Default / Inherit",
+            "value": ""
+          },
+          {
+            "name": "White",
+            "value": "white"
+          },
+          {
+            "name": "Soft Light",
+            "value": "light"
+          }
+        ]
       }
     ]
   }

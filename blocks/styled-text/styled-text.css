@@ -88,6 +88,22 @@
   color: var(--link-hover-color);
 }
 
+.styled-text .styled-text-inline-color-text {
+  color: var(--text-color);
+}
+
+.styled-text .styled-text-inline-color-dark {
+  color: var(--dark-color);
+}
+
+.styled-text .styled-text-inline-color-link {
+  color: var(--link-color);
+}
+
+.styled-text .styled-text-inline-color-link-hover {
+  color: var(--link-hover-color);
+}
+
 .styled-text-text-align-left .styled-text-content {
   text-align: left;
 }
@@ -98,4 +114,12 @@
 
 .styled-text-text-align-right .styled-text-content {
   text-align: right;
+}
+
+.styled-text-background-color-white {
+  background-color: var(--background-color);
+}
+
+.styled-text-background-color-light {
+  background-color: var(--light-color);
 }

@@ -133,6 +133,10 @@ Authors can configure the native `Content` rich text field, font family, font
 size, font weight, text color, and text alignment independently for each Styled
 Text instance. Select **Default / Inherit** to retain the site's existing style.
 Only values backed by existing typography and color tokens are available.
+Use the native RTE **Text Color** style picker for selected words or phrases.
+The properties-panel **Text Color** applies to the whole block. The optional
+**Background Color** supports Default / Inherit, White, and Soft Light so inherited
+text retains accessible contrast.
 
 Content uses the same native Universal Editor RTE capabilities as normal text:
 paragraphs and headings, bold, italic, underline, strike-through, inline code,
@@ -157,6 +161,7 @@ with a stable name:
 | `fontWeight` | Existing 400, 500, or 700 weights |
 | `textColor` | Existing text, dark, link, or hover-link color |
 | `textAlign` | Default, left, center, or right |
+| `backgroundColor` | Default, white, or soft-light background |
 
 Author-facing values map to existing tokens as follows:
 
@@ -187,7 +192,9 @@ provide a background control.
 4. Use bold, italic, a link, and a list in either Styled Text instance.
 5. Save and reopen the test page, then verify every value persists.
 6. Preview the branch and confirm the three components render independently.
-7. Do not publish to live or merge the feature branch.
+7. Select individual words in Content, use the RTE Text Color style picker, save,
+   and reopen to confirm the inline colors persist.
+8. Do not publish to live or merge the feature branch.
 
 The initial OOTB Text styling spike confirmed that its native rich text remained
 available in this AEM environment, but the core

@@ -16,6 +16,7 @@ const ALLOWED_VALUES = {
   fontWeight: new Set(['400', '500', '700']),
   textColor: new Set(['text', 'dark', 'link', 'link-hover']),
   textAlign: new Set(['left', 'center', 'right']),
+  backgroundColor: new Set(['white', 'light']),
 };
 
 function normalizeKey(value) {
@@ -56,6 +57,11 @@ export default function decorate(block) {
     fontWeight: validValue(block, 'fontWeight', rows.get('font-weight')?.textContent.trim() || ''),
     textColor: validValue(block, 'textColor', rows.get('text-color')?.textContent.trim() || ''),
     textAlign: validValue(block, 'textAlign', rows.get('text-align')?.textContent.trim() || ''),
+    backgroundColor: validValue(
+      block,
+      'backgroundColor',
+      rows.get('background-color')?.textContent.trim() || '',
+    ),
   };
 
   if (values.fontFamily === 'heading' && values.fontWeight
