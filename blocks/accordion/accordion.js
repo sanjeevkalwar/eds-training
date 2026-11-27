@@ -1,40 +1,41 @@
+let accordionCount = 0;
+
 export default function decorate(block) {
+  accordionCount += 1;
+
   const rows = [...block.children];
 
-  rows.forEach((row) => {
-    const question = row.children[0];
-    const answer = row.children[1];
+  rows.forEach((row, index) => {
+    const questionCell = row.children[0];
+    const answerCell = row.children[1];
 
-    if (!question || !answer) return;
+    if (!questionCell || !answerCell) return;
 
-    const questionText = question.textContent.trim();
+    const questionText = questionCell.textContent.trim();
 
-    // Create accordion button
     const button = document.createElement('button');
     button.className = 'accordion-question';
     button.type = 'button';
     button.textContent = questionText;
     button.setAttribute('aria-expanded', 'false');
 
-    // Create answer container
-    const answerContent = document.createElement('div');
-    answerContent.className = 'accordion-answer';
-    answerContent.hidden = true;
+    const answer = document.createElement('div');
+    answer.className = 'accordion-answer';
+    answer.id = `accordion-${accordionCount}-answer-${index}`;
+    answer.hidden = true;
 
-    answerContent.innerHTML = answer.innerHTML;
+    answer.innerHTML = answerCell.innerHTML;
 
-    // Clear original row
-    row.innerHTML = '';
+    button.setAttribute('aria-controls', answer.id);
 
-    // Add elements
-    row.append(button, answerContent);
+    row.classList.add('accordion-item');
+    row.replaceChildren(button, answer);
 
-    // Toggle accordion
     button.addEventListener('click', () => {
       const isExpanded = button.getAttribute('aria-expanded') === 'true';
 
       button.setAttribute('aria-expanded', String(!isExpanded));
-      answerContent.hidden = isExpanded;
+      answer.hidden = isExpanded;
       row.classList.toggle('active', !isExpanded);
     });
   });

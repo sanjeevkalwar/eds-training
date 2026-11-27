@@ -32,7 +32,7 @@
   {
     "id": "accordion",
     "components": [
-      "accordion"
+      "accordion-item"
     ]
   },
   {
