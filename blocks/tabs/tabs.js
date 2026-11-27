@@ -1,93 +1,150 @@
-let tabsCount = 0;
+import { createOptimizedPicture } from '../../scripts/aem.js';
+import { moveInstrumentation } from '../../scripts/scripts.js';
 
-export default function decorate(block) {
-  tabsCount += 1;
+// keep track globally of the number of tabs blocks on the page
+let tabBlockCnt = 0;
 
-  const rows = [...block.children];
+function optimizeImages(panel, eager) {
+  panel.querySelectorAll('picture > img').forEach((img) => {
+    const url = new URL(img.src, window.location.href);
+    if (url.origin !== window.location.origin || /\.svg$/i.test(url.pathname)) return;
+    const optimized = createOptimizedPicture(img.src, img.alt, eager, [
+      { media: '(min-width: 900px)', width: '2000' },
+      { width: '900' },
+    ]);
+    moveInstrumentation(img, optimized.querySelector('img'));
+    img.closest('picture').replaceWith(optimized);
+  });
+}
 
-  const tabList = document.createElement('div');
-  tabList.className = 'tabs-list';
-  tabList.setAttribute('role', 'tablist');
-  tabList.setAttribute('aria-label', 'Content tabs');
+/**
+ * Splits a panel's content cell into a media area (background picture)
+ * and a copy area (heading, description, CTA).
+ */
+function decoratePanel(panel, index) {
+  const content = document.createElement('div');
+  content.className = 'tabs-content';
+  // white copy box laid over the photo
+  const copy = document.createElement('div');
+  copy.className = 'tabs-copy';
+  content.append(copy);
+  const media = document.createElement('div');
+  media.className = 'tabs-media';
 
-  const panels = document.createElement('div');
-  panels.className = 'tabs-panels';
-
-  rows.forEach((row, index) => {
-    const titleCell = row.children[0];
-    const contentCell = row.children[1];
-
-    if (!titleCell || !contentCell) return;
-
-    const tabId = `tabs-${tabsCount}-tab-${index}`;
-    const panelId = `tabs-${tabsCount}-panel-${index}`;
-
-    const title = titleCell.textContent.trim();
-
-    // Create tab button
-    const button = document.createElement('button');
-    button.className = 'tabs-button';
-    button.type = 'button';
-    button.textContent = title;
-    button.id = tabId;
-    button.setAttribute('role', 'tab');
-    button.setAttribute('aria-controls', panelId);
-    button.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
-    button.setAttribute('tabindex', index === 0 ? '0' : '-1');
-
-    // Create content panel
-    const panel = document.createElement('div');
-    panel.className = 'tabs-panel';
-    panel.id = panelId;
-    panel.setAttribute('role', 'tabpanel');
-    panel.setAttribute('aria-labelledby', tabId);
-    panel.hidden = index !== 0;
-
-    panel.innerHTML = contentCell.innerHTML;
-
-    // Add tab and panel
-    tabList.append(button);
-    panels.append(panel);
-
-    // Handle tab click
-    button.addEventListener('click', () => {
-      activateTab(index);
+  [...panel.children].forEach((cell) => {
+    [...cell.children].forEach((el) => {
+      const isPictureOnly = el.tagName === 'PICTURE'
+        || (el.querySelector('picture') && el.textContent.trim() === '');
+      if (isPictureOnly) media.append(el);
+      else copy.append(el);
     });
-
-    // Handle keyboard navigation
-    button.addEventListener('keydown', (event) => {
-      let nextIndex = index;
-
-      if (event.key === 'ArrowRight') {
-        nextIndex = (index + 1) % rows.length;
-      } else if (event.key === 'ArrowLeft') {
-        nextIndex = (index - 1 + rows.length) % rows.length;
-      } else if (event.key === 'Home') {
-        nextIndex = 0;
-      } else if (event.key === 'End') {
-        nextIndex = rows.length - 1;
-      } else {
-        return;
-      }
-
-      event.preventDefault();
-
-      const nextButton = tabList.children[nextIndex];
-      nextButton.focus();
-      activateTab(nextIndex);
-    });
+    // keep the cell when it still carries UE instrumentation, otherwise drop it
+    if (!cell.children.length) {
+      moveInstrumentation(cell, content);
+      cell.remove();
+    }
   });
 
-  function activateTab(activeIndex) {
-    [...tabList.children].forEach((button, index) => {
-      const isActive = index === activeIndex;
+  if (media.children.length) {
+    optimizeImages(media, index === 0);
+    panel.classList.add('tabs-has-media');
+    panel.append(media);
+  }
+  panel.append(content);
+}
 
-      button.setAttribute('aria-selected', String(isActive));
-      button.setAttribute('tabindex', isActive ? '0' : '-1');
+export default async function decorate(block) {
+  // build tablist
+  const tablist = document.createElement('div');
+  tablist.className = 'tabs-list';
+  tablist.setAttribute('role', 'tablist');
+  tabBlockCnt += 1;
+  tablist.id = `tabs-tablist-${tabBlockCnt}`;
 
-      panels.children[index].hidden = !isActive;
+  // the first cell of each row is the label of the tab
+  const rows = [...block.children]
+    .filter((row) => row.firstElementChild && row.firstElementChild.textContent.trim() !== '');
+
+  rows.forEach((row, i) => {
+    const tab = row.firstElementChild;
+    const id = `tabs-panel-${tabBlockCnt}-${i + 1}`;
+
+    // decorate tabpanel
+    const tabpanel = row;
+    tabpanel.className = 'tabs-panel';
+    tabpanel.id = id;
+    tabpanel.setAttribute('aria-hidden', i !== 0);
+    tabpanel.setAttribute('aria-labelledby', `tab-${id}`);
+    tabpanel.setAttribute('role', 'tabpanel');
+
+    // build tab button
+    const button = document.createElement('button');
+    button.className = 'tabs-tab';
+    button.id = `tab-${id}`;
+    button.innerHTML = tab.innerHTML;
+    button.setAttribute('aria-controls', id);
+    button.setAttribute('aria-selected', i === 0);
+    button.setAttribute('role', 'tab');
+    button.setAttribute('type', 'button');
+    if (i !== 0) button.setAttribute('tabindex', '-1');
+
+    button.addEventListener('click', () => {
+      block.querySelectorAll('.tabs-panel').forEach((panel) => {
+        panel.setAttribute('aria-hidden', true);
+      });
+      tablist.querySelectorAll('button').forEach((btn) => {
+        btn.setAttribute('aria-selected', false);
+        btn.setAttribute('tabindex', '-1');
+      });
+      tabpanel.setAttribute('aria-hidden', false);
+      button.setAttribute('aria-selected', true);
+      button.removeAttribute('tabindex');
+    });
+
+    tablist.append(button);
+
+    // remove the tab label from the panel, which also removes it from the UE tree
+    tab.remove();
+    if (button.firstElementChild) {
+      moveInstrumentation(button.firstElementChild, null);
+    }
+
+    decoratePanel(tabpanel, i);
+  });
+
+  // arrow-key navigation between tabs
+  tablist.addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+    const buttons = [...tablist.querySelectorAll('button')];
+    const current = buttons.indexOf(document.activeElement);
+    if (current < 0) return;
+    let next = current;
+    if (e.key === 'ArrowRight') next = (current + 1) % buttons.length;
+    if (e.key === 'ArrowLeft') next = (current - 1 + buttons.length) % buttons.length;
+    if (e.key === 'Home') next = 0;
+    if (e.key === 'End') next = buttons.length - 1;
+    e.preventDefault();
+    buttons[next].focus();
+    buttons[next].click();
+  });
+
+  // panels without their own photo reuse the first panel's photo as a shared background
+  const sharedMedia = block.querySelector('.tabs-panel.tabs-has-media .tabs-media');
+  if (sharedMedia) {
+    block.querySelectorAll('.tabs-panel:not(.tabs-has-media)').forEach((panel) => {
+      const clone = sharedMedia.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      clone.querySelectorAll('*').forEach((el) => {
+        [...el.attributes]
+          .filter(({ name }) => name.startsWith('data-aue-') || name.startsWith('data-richtext-'))
+          .forEach(({ name }) => el.removeAttribute(name));
+      });
+      clone.querySelectorAll('img').forEach((img) => img.setAttribute('loading', 'lazy'));
+      panel.classList.add('tabs-has-media');
+      panel.prepend(clone);
     });
   }
 
-  block.replaceChildren(tabList, panels);
+  // tabs sit beneath the panels, matching the source layout
+  block.append(tablist);
 }

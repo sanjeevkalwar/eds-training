@@ -326,15 +326,17 @@
           }
         },
         {
-          "title": "Tab Item",
+          "title": "Tabs Item",
           "id": "tabs-item",
           "plugins": {
             "xwalk": {
               "page": {
-                "resourceType": "core/franklin/components/block/v1/block",
+                "resourceType": "core/franklin/components/block/v1/block/item",
                 "template": {
-                  "name": "Tab Item",
-                  "model": "tabs-item"
+                  "name": "Tabs Item",
+                  "model": "tabs-item",
+                  "title": "Tab Name",
+                  "content_headingType": "h3"
                 }
               }
             }
