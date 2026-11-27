@@ -110,11 +110,14 @@
           "name": "backgroundColor",
           "label": "Background Color",
           "value": "",
-          "description": "Only light surfaces are available so inherited text remains WCAG AA readable.",
+          "description": "Dark and blue surfaces preserve inherited text for this POC and may require an explicit Text Color.",
           "options": [
             { "name": "Default / Inherit", "value": "" },
             { "name": "White", "value": "white" },
-            { "name": "Soft Light", "value": "light" }
+            { "name": "Soft Light", "value": "light" },
+            { "name": "Dark Gray", "value": "dark" },
+            { "name": "Link Blue", "value": "link" },
+            { "name": "Deep Blue", "value": "link-hover" }
           ]
         }
       ]

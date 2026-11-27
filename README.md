@@ -135,8 +135,10 @@ Text instance. Select **Default / Inherit** to retain the site's existing style.
 Only values backed by existing typography and color tokens are available.
 Use the native RTE **Text Color** style picker for selected words or phrases.
 The properties-panel **Text Color** applies to the whole block. The optional
-**Background Color** supports Default / Inherit, White, and Soft Light so inherited
-text retains accessible contrast.
+**Background Color** supports Default / Inherit, White, Soft Light, Dark Gray,
+Link Blue, and Deep Blue. Dark Gray and the blue backgrounds intentionally retain
+inherited text for this POC and may fail WCAG contrast; authors must inspect the
+rendered result or select a suitable whole-block Text Color explicitly.
 
 Content uses the same native Universal Editor RTE capabilities as normal text:
 paragraphs and headings, bold, italic, underline, strike-through, inline code,
@@ -179,9 +181,9 @@ Author-facing values map to existing tokens as follows:
 | Deep Blue | `link-hover` | `--link-hover-color` (`#1d3ecf`) |
 
 All explicit text colors meet the normal-text WCAG AA contrast threshold against
-the default white inherited page surface. Validation against a page-specific
-non-white background still requires rendered-page testing; Styled Text does not
-provide a background control.
+the default white inherited page surface. The approved POC exception for dark
+and blue backgrounds preserves inherited text and can produce inaccessible
+combinations; rendered contrast must be checked before production use.
 
 #### POC demonstration
 

@@ -90,6 +90,10 @@ test('Styled Text is additive and leaves OOTB Text unchanged', async () => {
   assert.equal(fields.has('lineHeight'), false);
   assert.equal(fields.has('letterSpacing'), false);
   assert.equal(fields.has('surfaceVariant'), false);
+  assert.deepEqual(
+    fields.get('backgroundColor').options.map(({ value }) => value),
+    ['', 'white', 'light', 'dark', 'link', 'link-hover'],
+  );
   fields.get('textColor').options.forEach(({ name }) => {
     assert.notEqual(name, 'White for Dark Surfaces');
   });
@@ -306,7 +310,7 @@ test('styled text defaults safely and ignores invalid values', (t) => {
     <div><div>fontFamily</div><div>unknown-font</div></div>
     <div><div>fontWeight</div><div>900</div></div>
     <div><div>textColor</div><div>dangerous</div></div>
-    <div><div>backgroundColor</div><div>dark</div></div>
+    <div><div>backgroundColor</div><div>unsupported</div></div>
   </div>`);
 
   decorateStyledText(block);

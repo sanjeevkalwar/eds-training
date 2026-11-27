@@ -123,3 +123,15 @@
 .styled-text-background-color-light {
   background-color: var(--light-color);
 }
+
+.styled-text-background-color-dark {
+  background-color: var(--dark-color);
+}
+
+.styled-text-background-color-link {
+  background-color: var(--link-color);
+}
+
+.styled-text-background-color-link-hover {
+  background-color: var(--link-hover-color);
+}

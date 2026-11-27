@@ -16,7 +16,7 @@ const ALLOWED_VALUES = {
   fontWeight: new Set(['400', '500', '700']),
   textColor: new Set(['text', 'dark', 'link', 'link-hover']),
   textAlign: new Set(['left', 'center', 'right']),
-  backgroundColor: new Set(['white', 'light']),
+  backgroundColor: new Set(['white', 'light', 'dark', 'link', 'link-hover']),
 };
 
 function normalizeKey(value) {
