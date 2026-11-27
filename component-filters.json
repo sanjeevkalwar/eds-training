@@ -26,7 +26,8 @@
       "list-dynamic-artwork",
       "media-list",
       "split-banner",
-      "accordion"
+      "accordion",
+      "tabs"
     ]
   },
   {
@@ -66,6 +67,12 @@
     "id": "feature-card",
     "components": [
       "feature"
+    ]
+  },
+  {
+    "id": "tabs",
+    "components": [
+      "tabs-item"
     ]
   }
 ]

@@ -562,5 +562,24 @@
         ]
       }
     ]
+  },
+  {
+    "id": "tabs-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tabTitle",
+        "label": "Tab Title",
+        "value": "",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "tabContent",
+        "label": "Tab Content",
+        "value": "",
+        "valueType": "string"
+      }
+    ]
   }
 ]
